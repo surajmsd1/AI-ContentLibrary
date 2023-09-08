@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static jakarta.persistence.GenerationType.*;
 
@@ -24,8 +25,5 @@ public class ContentPage {
     private LocalDateTime date;
     private Boolean reviewed;
     private int rating;
-
-
-
 
 }
