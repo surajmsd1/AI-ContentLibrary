@@ -16,7 +16,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @Slf4j
-public class ContentPageImpl implements ContentPageService {
+public class ContentPageServiceImpl implements ContentPageService {
     private final ContentPageRepo contentPageRepo;
     @Override
     public ContentPage createContentPage(ContentPage contentPage) {
