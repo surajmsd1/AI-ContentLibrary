@@ -17,9 +17,9 @@ import java.util.Map;
 @RequestMapping("/content-page")
 @RequiredArgsConstructor
 public class ContentPageResource {
-    private ContentPageServiceImpl contentPageService;
+    private final ContentPageServiceImpl contentPageService;
 
-    @RequestMapping("/list")
+    @GetMapping("/list")
     public ResponseEntity<Response> getContentPages(){
         return ResponseEntity.ok(
             Response.builder()
@@ -32,7 +32,7 @@ public class ContentPageResource {
         );
     }
 
-    @RequestMapping("/get/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<Response> getContentPage(@PathVariable("id") Long id){
         return ResponseEntity.ok(
                 Response.builder()
@@ -47,26 +47,33 @@ public class ContentPageResource {
 
     @PostMapping("/save")
     public ResponseEntity<Response> saveNewContentPage(@RequestBody @Valid ContentPage contentPage){
+        ContentPage savedContentPage = contentPageService.createContentPage(contentPage);
         return ResponseEntity.ok(
           Response.builder()
                 .timeStamp(LocalDateTime.now())
-                .data(Map.of("ContentPage",contentPage))
+                .data(Map.of("ContentPage",savedContentPage))
                 .message("saved new content page")
                 .status(HttpStatus.CREATED)
                 .statusCode(HttpStatus.CREATED.value())
                 .build()
         );
     }
+
+    //if id found return no_content, else if id not found return not_found
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Response> deleteContentPage(@PathVariable("id") Long id){
-        return ResponseEntity.ok(
-                Response.builder()
-                        .timeStamp(LocalDateTime.now())
-                        .data(Map.of("ContentPage",contentPageService.deleteContentPage(id)))
-                        .message("Deleted content page with id:"+id)
-                        .status(HttpStatus.OK)
-                        .statusCode(HttpStatus.OK.value())
-                        .build()
-        );
+        if (contentPageService.deleteContentPage(id)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    Response.builder()
+                            .timeStamp(LocalDateTime.now())
+                            .message("Content page with id:" + id + " not found.")
+                            .status(HttpStatus.NOT_FOUND)
+                            .statusCode(HttpStatus.NOT_FOUND.value())
+                            .build()
+            );
+        }
     }
+
 }
