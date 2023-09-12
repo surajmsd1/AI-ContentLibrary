@@ -39,7 +39,7 @@ public class ContentPageResource {
                 Response.builder()
                         .timeStamp(LocalDateTime.now())
                         .data(Map.of("ContentPage", contentPageServiceImpl.getContentPageById(id)))
-                        .message("Page with id:"+id+ " retrieved")
+                        .message("Page with id: "+id+ " retrieved")
                         .status(HttpStatus.OK)
                         .statusCode(HttpStatus.OK.value())
                         .build()
