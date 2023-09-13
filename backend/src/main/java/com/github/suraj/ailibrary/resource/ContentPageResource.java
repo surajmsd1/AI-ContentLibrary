@@ -69,7 +69,7 @@ public class ContentPageResource {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     Response.builder()
                             .timeStamp(LocalDateTime.now())
-                            .message("Content page with id:" + id + " not found.")
+                            .message("Content page with id: " + id + " not found.")
                             .status(HttpStatus.NOT_FOUND)
                             .statusCode(HttpStatus.NOT_FOUND.value())
                             .build()
