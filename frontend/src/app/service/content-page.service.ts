@@ -8,7 +8,7 @@ import { CustomResponse } from '../interfaces/CustomResponse';
 @Injectable({  providedIn: 'root' })
 export class ContentPageService {
   
-  private apiUrl = "localhost:8080/content-pages";
+  private apiUrl = "http://localhost:8080/content-pages";
 
   constructor(private http: HttpClient) {}
 
