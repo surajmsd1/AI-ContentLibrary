@@ -14,7 +14,9 @@ import { DataState } from './enums/data-state';
 export class AppComponent implements OnInit {
   appState$: Observable<AppState<CustomResponse>> = 
   of({ dataState: DataState.LOADING_STATE });
-
+  
+  dataStateEnum = DataState;
+  
   constructor(private contentPageService: ContentPageService) {}
 
   ngOnInit(): void {
