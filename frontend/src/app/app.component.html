@@ -1,35 +1,81 @@
 <!-- <div> {{appState$ | async | json}} </div>-->
 <!-- app.component.html -->
-
-<div *ngIf="appState$ | async as appState">
+<!--
+<ng-container class="container" *ngIf="appState$ | async as appState">
     
-    <!-- Display when data is loading -->
+     Display when data is loading
     <div *ngIf="appState.dataState === dataStateEnum.LOADING_STATE">
         <p>Loading content pages...</p>
     </div>
     
-    <!-- Display data when successfully loaded -->
+     Display data when successfully loaded
     <div *ngIf="appState.dataState === dataStateEnum.LOADED_STATE">
         
-        <!-- Display if there's a single content page -->
+         Display if there's a single content page 
         <div *ngIf="appState.appData?.data?.ContentPage">
             <h2>{{appState.appData?.data?.ContentPage?.prompt}}</h2>
             <p>{{appState.appData?.data?.ContentPage?.response}}</p>
-            <!-- Add more fields as needed -->
+             Add more fields as needed 
         </div>
         
-        <!-- Display if there's an array of content pages -->
+         Display if there's an array of content pages 
         <div *ngFor="let contentPage of appState.appData?.data?.ContentPages">
             <h2>{{contentPage.prompt}}</h2>
             <p>{{contentPage.response}}</p>
-            <!-- Add more fields as needed -->
+             Add more fields as needed 
         </div>
         
     </div>
     
-    <!-- Display when there's an error -->
+     Display when there's an error 
     <div *ngIf="appState.dataState === dataStateEnum.ERROR_STATE">
         <p>Error loading content pages: {{appState.error}}</p>
     </div>
+    <div>
+        
+    </div>
+
+</div> -->
+<div class="container border"><h1>Ai Library</h1></div>
+<div class="container"> 
+    <div class="border p-5 d-flex justify-content-spacearound" >
+        <input [(ngModel)] = "searchQuery" class="form-control w-50 mr-3" placeholder="Search Ai library..." >
+        <button (click)="onSearch()" class="btn btn-outline-primary ml-3">Search</button>
+        <button disabled class="btn btn-success ml-3">Generate</button>
+    </div>
+</div>
+<div class="container" *ngIf="appState$ | async as appState">
+    
+    <!-- Display when data is loading -->
+   <div *ngIf="appState.dataState === dataStateEnum.LOADING_STATE">
+       <p>Loading content pages...</p>
+   </div>
+   
+    <!-- Display data when successfully loaded -->
+   <div *ngIf="appState.dataState === dataStateEnum.LOADED_STATE">
+       
+        <!-- Display if there's a single content page  -->
+       <div class="justify-content-center" *ngIf="appState.appData?.data?.ContentPage">
+           <h2>{{appState.appData?.data?.ContentPage?.prompt}}</h2>
+           <p>{{appState.appData?.data?.ContentPage?.response}}</p>
+            <!-- Add more fields as needed  -->
+       </div>
+       
+        <!-- Display if there's an array of content pages  -->
+       <div class="border p-2 " *ngFor="let contentPage of appState.appData?.data?.ContentPages; let i = index ">
+           <h2>Question {{i+1}}: {{contentPage.prompt}}</h2>
+           <p>Answer: {{contentPage.response}}</p>
+            <!-- Add more fields as needed  -->
+       </div>
+       
+   </div>
+   
+    <!-- Display when there's an error  -->
+   <div *ngIf="appState.dataState === dataStateEnum.ERROR_STATE">
+       <p>Error loading content pages: {{appState.error}}</p>
+   </div>
+   <div>
+       
+   </div>
 
 </div>
