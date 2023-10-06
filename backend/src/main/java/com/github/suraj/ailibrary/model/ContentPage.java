@@ -2,6 +2,7 @@ package com.github.suraj.ailibrary.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,13 +21,20 @@ public class ContentPage {
     @Id @GeneratedValue(strategy = IDENTITY)
     private Long id;
     @NotEmpty(message = "prompt cannot be empty")
+    //Title, Question, Topic
     private String prompt;
-    @Column(columnDefinition = "MEDIUMTEXT") //can store up to 16 megabytes sheesh
+    @Column(columnDefinition = "MEDIUMTEXT") //can store up to 16 megabytes
+    //Content, Answer
+//    @NotEmpty(message = "Response cannot be empty")
     private String response;
+    //Ai Model used to generate content
+//    @NotEmpty(message = "Please enter Model Type, Cannot be empty")
     private String modelType;
-
     private LocalDateTime date;
+    //who reviewed the content
+//    @NotEmpty(message = "Please enter who wrote this entry")
     private String reviewed;
+    //Rating of the content page
     private Integer rating;
 
 }

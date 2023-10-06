@@ -20,6 +20,7 @@ import java.util.Map;
 public class ContentPageResource {
     private final ContentPageServiceImpl contentPageServiceImpl;
 
+    //Get all content pages
     @GetMapping("/")
     public ResponseEntity<Response> getContentPages(){
         return ResponseEntity.ok(
@@ -33,6 +34,7 @@ public class ContentPageResource {
         );
     }
 
+    //Get a specific content page by id
     @GetMapping("/{id}")
     public ResponseEntity<Response> getContentPage(@PathVariable("id") Long id){
         return ResponseEntity.ok(
@@ -46,6 +48,7 @@ public class ContentPageResource {
         );
     }
 
+    //save a new content page found in RequestBody
     @PostMapping("/")
     public ResponseEntity<Response> saveNewContentPage(@RequestBody @Valid ContentPage contentPage){
         ContentPage savedContentPage = contentPageServiceImpl.createContentPage(contentPage);
@@ -60,7 +63,7 @@ public class ContentPageResource {
         );
     }
 
-    //if id found return status no_content, else if id not found return status not_found
+    //if id found return status "success no_content", else if id not found return status "failed not_found".
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Response> deleteContentPage(@PathVariable("id") Long id){
         if (contentPageServiceImpl.deleteContentPage(id)) {
@@ -90,17 +93,32 @@ public class ContentPageResource {
                         .message("No Content Pages found with the query: "+query)
                         .build()
             );
-        }else{
+        }else {
             return ResponseEntity.ok(
                     Response.builder()
-                        .timeStamp(LocalDateTime.now())
-                        .status(HttpStatus.OK)
-                        .statusCode(HttpStatus.OK.value())
-                        .message("Retrieved all content pages related to the query: "+query)
-                        .data(Map.of("ContentPages",results))
-                    .build()
+                            .timeStamp(LocalDateTime.now())
+                            .status(HttpStatus.OK)
+                            .statusCode(HttpStatus.OK.value())
+                            .message("Retrieved all content pages related to the query: " + query)
+                            .data(Map.of("ContentPages", results))
+                            .build()
             );
         }
     }
+
+//    //edit a content page by id
+//    @PatchMapping("/{id}")
+//    public ResponseEntity<Response> patchContentPageById(@RequestBody @Valid ContentPage contentPage){
+//        ContentPage savedContentPage = contentPageServiceImpl.createContentPage(contentPage);
+//        return ResponseEntity.ok(
+//                Response.builder()
+//                        .timeStamp(LocalDateTime.now())
+//                        .data(Map.of("ContentPage",savedContentPage))
+//                        .message("saved new content page")
+//                        .status(HttpStatus.ACCEPTED)
+//                        .statusCode(HttpStatus.ACCEPTED.value())
+//                        .build()
+//        );
+//    }
 
 }
