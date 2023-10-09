@@ -1,47 +1,12 @@
 <!-- <div> {{appState$ | async | json}} </div>-->
 <!-- app.component.html -->
-<!--
-<ng-container class="container" *ngIf="appState$ | async as appState">
-    
-     Display when data is loading
-    <div *ngIf="appState.dataState === dataStateEnum.LOADING_STATE">
-        <p>Loading content pages...</p>
-    </div>
-    
-     Display data when successfully loaded
-    <div *ngIf="appState.dataState === dataStateEnum.LOADED_STATE">
-        
-         Display if there's a single content page 
-        <div *ngIf="appState.appData?.data?.ContentPage">
-            <h2>{{appState.appData?.data?.ContentPage?.prompt}}</h2>
-            <p>{{appState.appData?.data?.ContentPage?.response}}</p>
-             Add more fields as needed 
-        </div>
-        
-         Display if there's an array of content pages 
-        <div *ngFor="let contentPage of appState.appData?.data?.ContentPages">
-            <h2>{{contentPage.prompt}}</h2>
-            <p>{{contentPage.response}}</p>
-             Add more fields as needed 
-        </div>
-        
-    </div>
-    
-     Display when there's an error 
-    <div *ngIf="appState.dataState === dataStateEnum.ERROR_STATE">
-        <p>Error loading content pages: {{appState.error}}</p>
-    </div>
-    <div>
-        
-    </div>
-
-</div> -->
-<div class="container border"><h1>Ai Library</h1></div>
+<div class="container d-flex justify-content-center border"><h1 class="">Ai-Library</h1></div>
 <div class="container"> 
-    <div class="border p-5 d-flex justify-content-spacearound" >
-        <input [(ngModel)] = "searchQuery" class="form-control w-50 mr-3" placeholder="Search Ai library..." >
-        <button (click)="onSearch()" class="btn btn-outline-primary ml-3">Search</button>
-        <button disabled class="btn btn-success ml-3">Generate</button>
+    <div class="border p-5 d-flex " >
+        <input [(ngModel)] = "searchQuery" class="form-control w-50 " placeholder="Search for your notes..." >
+        <button (click)="onSearch()" class="btn btn-outline-primary ">Search Notes</button>
+        <button (click) = "onOpenAddModal()" class="btn btn-primary ">Create Note</button>
+        <button disabled class="btn btn-success ml-3">Generate Note</button>
     </div>
 </div>
 <div class="container" *ngIf="appState$ | async as appState">
@@ -74,8 +39,6 @@
    <div *ngIf="appState.dataState === dataStateEnum.ERROR_STATE">
        <p>Error loading content pages: {{appState.error}}</p>
    </div>
-   <div>
-       
-   </div>
+   
 
 </div>

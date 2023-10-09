@@ -1,1 +1,36 @@
-<p>content-page-modal works!</p>
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Add New Note</h4>
+</div>
+<div class="modal-body">
+    <form [formGroup]="contentPageForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label>Prompt:</label>
+            <input formControlName="prompt" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Response:</label>
+            <input formControlName="response" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>AI Model Type</label>
+            <input formControlName="modeltype" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Moderated by:</label>
+            <input formControlName="reviewed" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Rating:</label>
+            <input formControlName="rating" class="form-control">
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-success" (click)="onSubmit()">Add</button>
+    <button class="btn btn-outline-danger" type="button" (click)="dismiss()">
+        Cancel
+    </button>
+    <!--<button class="btn btn-primary" type="button" (click)="successCallback()">
+        OK
+    </button><-->
+</div>

@@ -3,8 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule} from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ContentPageModalComponent } from './components/content-page-modal/content-page-modal.component';
+import { BsModalService } from 'ngx-bootstrap/modal';
 @NgModule({
   declarations: [
     AppComponent,
@@ -14,9 +15,10 @@ import { ContentPageModalComponent } from './components/content-page-modal/conte
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [BsModalService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
