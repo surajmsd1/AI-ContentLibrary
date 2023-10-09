@@ -20,21 +20,21 @@ import static jakarta.persistence.GenerationType.*;
 public class ContentPage {
     @Id @GeneratedValue(strategy = IDENTITY)
     private Long id;
-    @NotEmpty(message = "prompt cannot be empty")
+
     //Title, Question, Topic
+    @NotEmpty(message = "prompt cannot be empty")
     private String prompt;
-    @Column(columnDefinition = "MEDIUMTEXT") //can store up to 16 megabytes
     //Content, Answer
-//    @NotEmpty(message = "Response cannot be empty")
+    //@NotEmpty(message = "Response cannot be empty")
+    @Column(columnDefinition = "MEDIUMTEXT") //can store up to 16 megabytes
     private String response;
     //Ai Model used to generate content
-//    @NotEmpty(message = "Please enter Model Type, Cannot be empty")
+    //@NotEmpty(message = "Please enter Model Type, Cannot be empty")
     private String modelType;
     private LocalDateTime date;
     //who reviewed the content
-//    @NotEmpty(message = "Please enter who wrote this entry")
+    //@NotEmpty(message = "Please enter who wrote this entry")
     private String reviewed;
     //Rating of the content page
     private Integer rating;
-
 }

@@ -49,7 +49,7 @@ public class ContentPageResource {
     }
 
     //save a new content page found in RequestBody
-    @PostMapping("/")
+    @PostMapping("/save")
     public ResponseEntity<Response> saveNewContentPage(@RequestBody @Valid ContentPage contentPage){
         ContentPage savedContentPage = contentPageServiceImpl.createContentPage(contentPage);
         return ResponseEntity.ok(
