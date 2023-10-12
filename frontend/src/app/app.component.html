@@ -1,10 +1,10 @@
 <!-- <div> {{appState$ | async | json}} </div>-->
 <!-- app.component.html -->
-<div class="container d-flex justify-content-center border"><h1 class="">Ai-Library</h1></div>
+<div class="container d-flex justify-content-center border bg-dark text-white"><h1 class="">Ai-Library</h1></div>
 <div class="container"> 
     <div class="border p-5 d-flex " >
-        <input [(ngModel)] = "searchQuery" class="form-control w-50 " placeholder="Search for your notes..." >
-        <button (click)="onSearch()" class="btn btn-outline-primary ">Search Notes</button>
+        <input [(ngModel)] = "searchQuery" (keyup.enter) = "onSearch()" class="form-control w-50 " placeholder="Search for your notes..." >
+        <button (click) = "onSearch()" class="btn btn-outline-primary ">Search Notes</button>
         <button (click) = "onOpenAddModal()" class="btn btn-primary ">Create Note</button>
         <button disabled class="btn btn-success ml-3">Generate Note</button>
     </div>
@@ -20,25 +20,31 @@
    <div *ngIf="appState.dataState === dataStateEnum.LOADED_STATE">
        
         <!-- Display if there's a single content page  -->
-       <div class="justify-content-center" *ngIf="appState.appData?.data?.ContentPage">
-           <h2>{{appState.appData?.data?.ContentPage?.prompt}}</h2>
-           <p>{{appState.appData?.data?.ContentPage?.response}}</p>
-            <!-- Add more fields as needed  -->
+       <div class="justify-content-center border" *ngIf="appState.appData?.data?.ContentPage">
+            
+            <h2>{{appState.appData?.data?.ContentPage?.prompt}}</h2>
+            <p>{{appState.appData?.data?.ContentPage?.response}}</p>
+            
        </div>
        
         <!-- Display if there's an array of content pages  -->
-       <div class="border p-2 " *ngFor="let contentPage of appState.appData?.data?.ContentPages; let i = index ">
-           <h2>Question {{i+1}}: {{contentPage.prompt}}</h2>
-           <p>Answer: {{contentPage.response}}</p>
-            <!-- Add more fields as needed  -->
-       </div>
-       
+        <div class="border p-2 card container" *ngFor="let contentPage of appState.appData?.data?.ContentPages; let i = index">
+            <div class="card-header row" >
+                <h2 class="col-10">Question {{i+1}}: {{contentPage.prompt}}</h2>
+                <button class="col-1" (click) = "onOpenEditModal(contentPage)">edit</button>
+                <button class="col-1" (click) = "onDelete(contentPage.id)">delete</button>
+            </div>
+            <div >
+                <div class="card-body">
+                    <p class="col-11">Answer: {{contentPage.response}}</p>
+                </div>
+            </div>
+        </div>
    </div>
    
     <!-- Display when there's an error  -->
    <div *ngIf="appState.dataState === dataStateEnum.ERROR_STATE">
        <p>Error loading content pages: {{appState.error}}</p>
    </div>
-   
 
 </div>

@@ -33,6 +33,14 @@ export class ContentPageService {
     catchError(this.handleError)
   );
 
+  patch$ = (ContentPage: ContentPage) => <Observable<CustomResponse>>
+  this.http.patch(`${this.apiUrl}/update`, ContentPage)
+  .pipe(
+    tap(console.log),
+    catchError(this.handleError)
+  );
+
+
   delete$ = (pageId: number) => <Observable<CustomResponse>>
   this.http.delete(`${this.apiUrl}/delete/${pageId}`)
   .pipe(
