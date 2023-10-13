@@ -93,7 +93,7 @@ public class ContentPageResource {
                         .message("No Content Pages found with the query: "+query)
                         .build()
             );
-        }else {
+        }else{
             return ResponseEntity.ok(
                     Response.builder()
                             .timeStamp(LocalDateTime.now())
@@ -106,19 +106,18 @@ public class ContentPageResource {
         }
     }
 
-//    //edit a content page by id
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<Response> patchContentPageById(@RequestBody @Valid ContentPage contentPage){
-//        ContentPage savedContentPage = contentPageServiceImpl.createContentPage(contentPage);
-//        return ResponseEntity.ok(
-//                Response.builder()
-//                        .timeStamp(LocalDateTime.now())
-//                        .data(Map.of("ContentPage",savedContentPage))
-//                        .message("saved new content page")
-//                        .status(HttpStatus.ACCEPTED)
-//                        .statusCode(HttpStatus.ACCEPTED.value())
-//                        .build()
-//        );
-//    }
-
+    //edit a content page b
+    @PatchMapping("/update")
+    public ResponseEntity<Response> patchContentPage(@RequestBody @Valid ContentPage contentPage){
+        ContentPage updatedContentPage = contentPageServiceImpl.updateContentPage(contentPage);
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(LocalDateTime.now())
+                        .data(Map.of("ContentPage",updatedContentPage))
+                        .message("Updated new content page of id: "+ contentPage.getId())
+                        .status(HttpStatus.ACCEPTED)
+                        .statusCode(HttpStatus.ACCEPTED.value())
+                        .build()
+        );
+    }
 }

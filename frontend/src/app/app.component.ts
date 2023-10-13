@@ -26,11 +26,7 @@ export class AppComponent implements OnInit {
     ) {}
 
   ngOnInit(): void {
-    this.appState$ = this.contentPageService.ContentPages$
-      .pipe(
-        map(response => ({dataState: DataState.LOADED_STATE, appData: response})),
-        catchError((error: string) => of({dataState: DataState.ERROR_STATE, error}))
-      );
+    this.getAllPages();
   }
 
   //open a modal and create ref for adding new contentpage to db
@@ -45,6 +41,10 @@ export class AppComponent implements OnInit {
         editContentPage: contentPage
       }
     });
+
+    this.bsModalRef.onHide?.subscribe(() => {
+      this.onDetails(contentPage.id);
+    })
   }
 
   onSearch(): void {
@@ -55,22 +55,28 @@ export class AppComponent implements OnInit {
         catchError((error: string) => of({ dataState: DataState.ERROR_STATE, error }))
       );
     }else{
-      this.appState$ = this.contentPageService.ContentPages$
-      .pipe(
-        map(response => ({dataState: DataState.LOADED_STATE, appData: response})),
-        catchError((error: string) => of({dataState: DataState.ERROR_STATE, error}))
-      );
+      this.getAllPages();
     }
     this.searchQuery='';
   }
 
   onDelete(pageId: number): void {
-    this.contentPageService.delete$(pageId)
-    .pipe(
-      map(response => ({dataState: DataState.LOADED_STATE, appData: response})),
-      catchError((error: string) => of({dataState: DataState.ERROR_STATE, error}))
-    );
-    
+    console.log(pageId+" called onDelete!");
+    this.appState$ = this.contentPageService.delete$(pageId)
+      .pipe(
+        map(response => ({dataState: DataState.LOADED_STATE, appData: response})),
+        catchError((error: string) => of({dataState: DataState.ERROR_STATE, error}))
+      );
+    alert(`Successfully Deleted page #${pageId}!`);
+    this.getAllPages();
+  }
+
+  getAllPages() {
+    this.appState$ = this.contentPageService.ContentPages$
+      .pipe(
+        map(response => ({ dataState: DataState.LOADED_STATE, appData: response })),
+        catchError((error: string) => of({ dataState: DataState.ERROR_STATE, error }))
+      );
   }
 
   onDetails(pageId: number): void {

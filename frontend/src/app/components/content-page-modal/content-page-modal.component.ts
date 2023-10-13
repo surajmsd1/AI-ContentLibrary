@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, AfterContentInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ContentPageService } from 'src/app/service/content-page.service';
 import { ContentPage } from 'src/app/interfaces/ContentPage';
+
 @Component({
   selector: 'app-content-page-modal',
   templateUrl: './content-page-modal.component.html',
@@ -56,6 +57,7 @@ export class ContentPageModalComponent implements OnInit{
       this.contentPageService.patch$(patchContentPage).subscribe(
         response => {
           alert('Successfully updated database!');
+          
           this.dismiss();
         },
         error => {

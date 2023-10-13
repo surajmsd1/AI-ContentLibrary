@@ -1,12 +1,14 @@
 <!-- <div> {{appState$ | async | json}} </div>-->
 <!-- app.component.html -->
+
 <div class="container d-flex justify-content-center border bg-dark text-white"><h1 class="">Ai-Library</h1></div>
 <div class="container"> 
-    <div class="border p-5 d-flex " >
-        <input [(ngModel)] = "searchQuery" (keyup.enter) = "onSearch()" class="form-control w-50 " placeholder="Search for your notes..." >
-        <button (click) = "onSearch()" class="btn btn-outline-primary ">Search Notes</button>
-        <button (click) = "onOpenAddModal()" class="btn btn-primary ">Create Note</button>
-        <button disabled class="btn btn-success ml-3">Generate Note</button>
+    <div class="border p-5 d-flex gap-1" >
+        <button  class="btn btn-outline-secondary"(click)= "onSearch()"><i class="fa fa-home" aria-hidden="true"></i></button>
+        <input [(ngModel)] = "searchQuery" (keyup.enter) = "onSearch()" class="form-control w-50 auto " placeholder="Search for your notes..." >
+        <button (click) = "onSearch()" class="btn btn-outline-primary ">Search</button>
+        <button (click) = "onOpenAddModal()" class="btn btn-outline-success "><i class="fa fa-plus" aria-hidden="true"></i> Create</button>
+        <button disabled class="btn btn-secondary ml-3">Generate Note</button>
     </div>
 </div>
 <div class="container" *ngIf="appState$ | async as appState">
@@ -28,11 +30,17 @@
        </div>
        
         <!-- Display if there's an array of content pages  -->
-        <div class="border p-2 card container" *ngFor="let contentPage of appState.appData?.data?.ContentPages; let i = index">
+        <div class= "p-2 card container" *ngFor="let contentPage of appState.appData?.data?.ContentPages; let i = index">
             <div class="card-header row" >
                 <h2 class="col-10">Question {{i+1}}: {{contentPage.prompt}}</h2>
-                <button class="col-1" (click) = "onOpenEditModal(contentPage)">edit</button>
-                <button class="col-1" (click) = "onDelete(contentPage.id)">delete</button>
+                <div class="col-2">
+                    <button class= " btn auto btn-outline-primary" (click) = "onOpenEditModal(contentPage)">
+                        <i class= "fa fa-pencil"></i> edit
+                    </button>
+                    <button class="btn auto btn-outline-danger" (click) = "onDelete(contentPage.id)">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i> delete
+                    </button>
+                </div>
             </div>
             <div >
                 <div class="card-body">
