@@ -25,24 +25,25 @@ public class AiLibraryApplication {
 	@Bean
 	public CommandLineRunner run(ContentPageRepo repo) {
 		return args -> {
-			if (repo.count() == 0) {
+//			if (repo.count() == 0) {
 				// Inserting JavaScript related queries
 				repo.save(new ContentPage(null, "How to declare a variable in JavaScript?",
 						"In JavaScript, you can declare a variable using the `var`, `let`, or `const` keywords. For example: `let variableName;`",
-						"GPT-3", LocalDateTime.now(), "Yes", 5));
+						"GPT-3", LocalDateTime.now(), "Yes", 5, null));
 
 				repo.save(new ContentPage(null, "Explain JavaScript closures.",
 						"A closure in JavaScript is a function that has access to the parent scope's variables, even after the parent function has closed.",
-						"GPT-3", LocalDateTime.now(), "Yes", 5));
+						"GPT-3", LocalDateTime.now(), "Yes", 5, null));
 
 				repo.save(new ContentPage(null, "Difference between `==` and `===` in JavaScript?",
 						"`==` checks for value equality with type coercion, while `===` checks for value equality without type coercion, ensuring that both the value and the type are the same.",
-						"GPT-3", LocalDateTime.now(), "Yes", 5));
+						"GPT-3", LocalDateTime.now(), "Yes", 5, null));
+
 
 				System.out.println("Sample JavaScript data inserted!");
-			}else{
-				System.out.println("Data already exists. Skipping insertion.");
-			}
+//			}else{
+//				System.out.println("Data already exists. Skipping insertion.");
+//			}
 		};
 	}
 

@@ -37,4 +37,8 @@ public class ContentPage {
     private String reviewed;
     //Rating of the content page
     private Integer rating;
+    //all categories this page exists in plus its index in the category
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contentPage", orphanRemoval = true )
+    private List<PageOrderEntry> orderings;
+
 }
