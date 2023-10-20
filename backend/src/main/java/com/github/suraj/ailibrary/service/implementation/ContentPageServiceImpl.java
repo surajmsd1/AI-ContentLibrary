@@ -1,8 +1,10 @@
 package com.github.suraj.ailibrary.service.implementation;
 
+import com.github.suraj.ailibrary.model.Category;
 import com.github.suraj.ailibrary.model.ContentPage;
+import com.github.suraj.ailibrary.model.PageOrderEntry;
 import com.github.suraj.ailibrary.repository.ContentPageRepo;
-import com.github.suraj.ailibrary.service.ContentPageService;
+import com.github.suraj.ailibrary.service.services.ContentPageService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,4 +57,5 @@ public class ContentPageServiceImpl implements ContentPageService {
         log.info("Fetching ContentPages related to: {}",query);
         return contentPageRepo.searchByPromptOrResponse(query);
     }
+
 }

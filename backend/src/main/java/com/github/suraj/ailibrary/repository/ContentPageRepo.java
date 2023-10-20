@@ -14,3 +14,4 @@ public interface ContentPageRepo extends JpaRepository<ContentPage, Long> {
             "ORDER BY relevance DESC", nativeQuery = true)
     List<ContentPage> searchByPromptOrResponse(String query);
 }
+

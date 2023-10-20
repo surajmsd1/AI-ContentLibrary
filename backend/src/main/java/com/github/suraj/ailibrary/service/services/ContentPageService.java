@@ -1,6 +1,8 @@
-package com.github.suraj.ailibrary.service;
+package com.github.suraj.ailibrary.service.services;
 
+import com.github.suraj.ailibrary.model.Category;
 import com.github.suraj.ailibrary.model.ContentPage;
+import com.github.suraj.ailibrary.model.PageOrderEntry;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,5 +26,4 @@ public interface ContentPageService {
 
     // 6. Search ContentPages by prompt or response
     List<ContentPage> searchByPromptOrResponse(String query);
-
 }

@@ -19,5 +19,4 @@ public class Response {
     protected String message;
     protected String developerMessage;
     protected Map<?,?> data;
-//    protected Map<?,?> categoryAndOrders;
 }
