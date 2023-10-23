@@ -32,7 +32,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Optional<Category> getById(Long id) {
+    public Optional<Category> getCategoryById(Long id) {
         log.info("Fetching Category by id: {}",id);
         return categoryRepo.findById(id);
     }
@@ -60,7 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getByName(String name) {
+    public Optional<Category> getCategoryByName(String name) {
         log.info("Fetching Category by name of: {}", name);
         return categoryRepo.findByName(name);
     }
@@ -83,16 +83,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<ContentPage> getAllPages(String name) {
+    public List<ContentPage> getAllCategoryPages(String name) {
         log.info("Fetching all pages for Category with name: {}", name);
-        Category category = categoryRepo.findByName(name);
+        Optional<Category> category = categoryRepo.findByName(name);
 
-        if (category == null) {
+        if (category.isEmpty()) {
             log.warn("No category found with name: {}", name);
             return Collections.emptyList();
         }
 
-        List<PageOrderEntry> pageEntries = category.getPages();
+        //get() transforms: optional <category> => category
+        List<PageOrderEntry> pageEntries = category.get().getPages();
         List<ContentPage> contentPages = new ArrayList<>();
         for (PageOrderEntry entry : pageEntries) {
             contentPages.add(entry.getContentPage());

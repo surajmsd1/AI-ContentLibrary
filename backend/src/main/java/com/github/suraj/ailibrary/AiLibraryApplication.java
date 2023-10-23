@@ -1,8 +1,12 @@
 package com.github.suraj.ailibrary;
 
+import com.github.suraj.ailibrary.model.Category;
 import com.github.suraj.ailibrary.model.ContentPage;
+import com.github.suraj.ailibrary.model.PageOrderEntry;
+import com.github.suraj.ailibrary.repository.CategoryRepo;
 import com.github.suraj.ailibrary.repository.ContentPageRepo;
 
+import com.github.suraj.ailibrary.repository.PageOrderEntryRepo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +17,7 @@ import org.springframework.web.filter.CorsFilter;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 @SpringBootApplication
@@ -23,29 +28,36 @@ public class AiLibraryApplication {
 	}
 
 	@Bean
-	public CommandLineRunner run(ContentPageRepo repo) {
+	public CommandLineRunner run(ContentPageRepo contentPageRepo, CategoryRepo categoryRepo, PageOrderEntryRepo pageOrderEntryRepo) {
 		return args -> {
-//			if (repo.count() == 0) {
-				// Inserting JavaScript related queries
-				repo.save(new ContentPage(null, "How to declare a variable in JavaScript?",
-						"In JavaScript, you can declare a variable using the `var`, `let`, or `const` keywords. For example: `let variableName;`",
-						"GPT-3", LocalDateTime.now(), "Yes", 5, null));
+			if (contentPageRepo.count() == 0) {
+				// 1. Create and Save Categories
+				Category javaCategory = new Category(null, "Java", new ArrayList<>());
+				Category jsCategory = new Category(null, "JavaScript", new ArrayList<>());
+				categoryRepo.saveAll(Arrays.asList(javaCategory, jsCategory));
 
-				repo.save(new ContentPage(null, "Explain JavaScript closures.",
-						"A closure in JavaScript is a function that has access to the parent scope's variables, even after the parent function has closed.",
-						"GPT-3", LocalDateTime.now(), "Yes", 5, null));
+				// 2. Create Content Pages
+				ContentPage jsPage1 = new ContentPage(null, "How to declare a variable in JavaScript?", "...", "GPT-3", LocalDateTime.now(), "Yes", 5, new ArrayList<>());
+				ContentPage jsPage2 = new ContentPage(null, "Explain JavaScript closures.", "...", "GPT-3", LocalDateTime.now(), "Yes", 5, new ArrayList<>());
+				contentPageRepo.saveAll(Arrays.asList(jsPage1, jsPage2));
 
-				repo.save(new ContentPage(null, "Difference between `==` and `===` in JavaScript?",
-						"`==` checks for value equality with type coercion, while `===` checks for value equality without type coercion, ensuring that both the value and the type are the same.",
-						"GPT-3", LocalDateTime.now(), "Yes", 5, null));
+				// 3. Create Page Order Entries
+				PageOrderEntry order1 = new PageOrderEntry(null, javaCategory, jsPage1, 0);
+				PageOrderEntry order2 = new PageOrderEntry(null, jsCategory, jsPage2, 1);
+				pageOrderEntryRepo.saveAll(Arrays.asList(order1, order2));
 
+				// 4. Add Page Order Entries to Content Pages and Save Again
+				jsPage1.getOrderings().add(order1);
+				jsPage2.getOrderings().add(order2);
+				contentPageRepo.saveAll(Arrays.asList(jsPage1, jsPage2));
 
-				System.out.println("Sample JavaScript data inserted!");
-//			}else{
-//				System.out.println("Data already exists. Skipping insertion.");
-//			}
+				System.out.println("Sample data inserted!");
+			} else {
+				System.out.println("Data already exists. Skipping insertion.");
+			}
 		};
 	}
+
 
 	@Bean
 	public CorsFilter corsFilter() {

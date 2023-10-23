@@ -12,7 +12,7 @@ public interface CategoryService {
     Category createCategory (String name);
 
     // 2. Get a category by id
-    Optional<Category> getById(Long id);
+    Optional<Category> getCategoryById(Long id);
 
     //3. Get all Categories
     List<Category> getAllCategories();
@@ -24,12 +24,12 @@ public interface CategoryService {
     Category updateCategory(Category category);
 
     // 6. Get Category by name
-    Category getByName (String name);
+    Optional<Category> getCategoryByName(String name);
 
     // 7. Add ContentPage to Category of
     PageOrderEntry addPageToCategory(ContentPage page, Category category);
 
     // 8. Get All ContentPages in Category
-    List<ContentPage> getAllPages(String name);
+    List<ContentPage> getAllCategoryPages(String name);
 
 }
