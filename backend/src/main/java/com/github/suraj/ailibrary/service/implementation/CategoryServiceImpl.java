@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> getAllCategories() {
-        log.info("Fetching all Catergories");
+        log.info("Fetching all Categories");
         return categoryRepo.findAll();
     }
 
@@ -49,21 +48,31 @@ public class CategoryServiceImpl implements CategoryService {
         if(categoryExists) {
             log.info("Deleting Category with name: {}", category.getName());
             categoryRepo.delete(category);
+            int pagesRemoved = pageOrderEntryRepo.deleteAllEntriesWithCategoryName(category.getName());
+            log.info("Category had {} pages associated with this category", pagesRemoved);
         }
         return categoryExists;
     }
 
     @Override
-    public Category updateCategory(Category category) {
-        log.info("Updating Category of name: {}",category.getName());
-        return categoryRepo.save(category);
+    public Category updateCategoryNameFromTo(String oldName, String newName) {
+        Optional<Category> category = categoryRepo.findByName(oldName);
+        if(category.isPresent()){
+            log.info("Updating Category of name: {} To {}",oldName, newName);
+            category.get().setName(newName);
+            return categoryRepo.save(category.get());
+        }
+        log.warn("Category with name: {} could not be found", oldName);
+        return null;
     }
 
+    //maybe return category instead of optional
     @Override
     public Optional<Category> getCategoryByName(String name) {
         log.info("Fetching Category by name of: {}", name);
         return categoryRepo.findByName(name);
     }
+
     @Override
     public PageOrderEntry addPageToCategory(ContentPage page, Category category) {
         log.info("Adding page to category with name: {}", category.getName());
@@ -72,18 +81,11 @@ public class CategoryServiceImpl implements CategoryService {
         newEntry.setContentPage(page);
         newEntry.setCategory(category);
 
-        List<PageOrderEntry> pages = category.getPages();
-        newEntry.setSequenceIndex(pages.size());  // Set the sequence index at the end.
-        pages.add(newEntry);
-
-        category.setPages(pages);
-        categoryRepo.save(category);
-
         return pageOrderEntryRepo.save(newEntry);
     }
 
     @Override
-    public List<ContentPage> getAllCategoryPages(String name) {
+    public List<ContentPage> getAllPagesWithCategoryName(String name) {
         log.info("Fetching all pages for Category with name: {}", name);
         Optional<Category> category = categoryRepo.findByName(name);
 
@@ -91,14 +93,6 @@ public class CategoryServiceImpl implements CategoryService {
             log.warn("No category found with name: {}", name);
             return Collections.emptyList();
         }
-
-        //get() transforms: optional <category> => category
-        List<PageOrderEntry> pageEntries = category.get().getPages();
-        List<ContentPage> contentPages = new ArrayList<>();
-        for (PageOrderEntry entry : pageEntries) {
-            contentPages.add(entry.getContentPage());
-        }
-
-        return contentPages;
+        return pageOrderEntryRepo.findContentPagesByCategoryName(name);
     }
 }

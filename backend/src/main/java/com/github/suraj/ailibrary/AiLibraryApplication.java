@@ -17,7 +17,6 @@ import org.springframework.web.filter.CorsFilter;
 
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 @SpringBootApplication
@@ -32,13 +31,13 @@ public class AiLibraryApplication {
 		return args -> {
 			if (contentPageRepo.count() == 0) {
 				// 1. Create and Save Categories
-				Category javaCategory = new Category(null, "Java", new ArrayList<>());
-				Category jsCategory = new Category(null, "JavaScript", new ArrayList<>());
+				Category javaCategory = new Category(null, "Java");
+				Category jsCategory = new Category(null, "JavaScript");
 				categoryRepo.saveAll(Arrays.asList(javaCategory, jsCategory));
 
 				// 2. Create Content Pages
-				ContentPage jsPage1 = new ContentPage(null, "How to declare a variable in JavaScript?", "...", "GPT-3", LocalDateTime.now(), "Yes", 5, new ArrayList<>());
-				ContentPage jsPage2 = new ContentPage(null, "Explain JavaScript closures.", "...", "GPT-3", LocalDateTime.now(), "Yes", 5, new ArrayList<>());
+				ContentPage jsPage1 = new ContentPage(null, "How to declare a variable in JavaScript?", "...", "GPT-3", LocalDateTime.now(), "Yes", 5);
+				ContentPage jsPage2 = new ContentPage(null, "Explain JavaScript closures.", "...", "GPT-3", LocalDateTime.now(), "Yes", 5);
 				contentPageRepo.saveAll(Arrays.asList(jsPage1, jsPage2));
 
 				// 3. Create Page Order Entries
@@ -46,10 +45,6 @@ public class AiLibraryApplication {
 				PageOrderEntry order2 = new PageOrderEntry(null, jsCategory, jsPage2, 1);
 				pageOrderEntryRepo.saveAll(Arrays.asList(order1, order2));
 
-				// 4. Add Page Order Entries to Content Pages and Save Again
-				jsPage1.getOrderings().add(order1);
-				jsPage2.getOrderings().add(order2);
-				contentPageRepo.saveAll(Arrays.asList(jsPage1, jsPage2));
 
 				System.out.println("Sample data inserted!");
 			} else {

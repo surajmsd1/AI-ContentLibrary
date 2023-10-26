@@ -21,7 +21,7 @@ public interface CategoryService {
     Boolean deleteCategory (Category category);
 
     // 5. Update Category
-    Category updateCategory(Category category);
+    Category updateCategoryNameFromTo(String oldName, String newName);
 
     // 6. Get Category by name
     Optional<Category> getCategoryByName(String name);
@@ -30,6 +30,6 @@ public interface CategoryService {
     PageOrderEntry addPageToCategory(ContentPage page, Category category);
 
     // 8. Get All ContentPages in Category
-    List<ContentPage> getAllCategoryPages(String name);
+    List<ContentPage> getAllPagesWithCategoryName(String name);
 
 }

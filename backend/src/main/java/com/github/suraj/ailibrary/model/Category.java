@@ -1,5 +1,8 @@
 package com.github.suraj.ailibrary.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -22,8 +25,5 @@ public class Category {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = true, fetch = FetchType.EAGER)
-    @OrderBy("sequenceIndex")
-    private List<PageOrderEntry> pages = new ArrayList<>();
 }
 

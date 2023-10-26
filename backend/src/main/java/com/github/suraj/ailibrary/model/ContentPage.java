@@ -1,5 +1,6 @@
 package com.github.suraj.ailibrary.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -41,9 +42,5 @@ public class ContentPage {
 
     //Rating of the content page
     private Integer rating;
-
-    //all categories this page exists in plus its index in the category
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contentPage", orphanRemoval = true )
-    private List<PageOrderEntry> orderings;
 
 }

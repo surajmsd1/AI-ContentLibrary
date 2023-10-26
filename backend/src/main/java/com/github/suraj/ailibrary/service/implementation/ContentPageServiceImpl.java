@@ -57,5 +57,4 @@ public class ContentPageServiceImpl implements ContentPageService {
         log.info("Fetching ContentPages related to: {}",query);
         return contentPageRepo.searchByPromptOrResponse(query);
     }
-
 }
