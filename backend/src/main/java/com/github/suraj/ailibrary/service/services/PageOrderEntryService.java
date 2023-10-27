@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface PageOrderEntryService {
 
     // 1. Create new order-category association
-    PageOrderEntry addPageToCategory(ContentPage page, Category category, int sequenceIndex);
+    PageOrderEntry addPageToCategoryAt(ContentPage page, Category category, int sequenceIndex);
     PageOrderEntry addPageToCategory(ContentPage contentPage, Category category);
 
     // 2. get Entry by id

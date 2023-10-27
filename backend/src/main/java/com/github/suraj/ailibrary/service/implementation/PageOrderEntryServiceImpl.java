@@ -22,49 +22,41 @@ public class PageOrderEntryServiceImpl implements PageOrderEntryService {
     private final PageOrderEntryRepo pageOrderEntryRepo;
     private final CategoryRepo categoryRepo;
 
+    //add page to end of category
     public PageOrderEntry addPageToCategory(ContentPage contentPage, Category category) {
         log.info("Adding page to category with name: {}", category.getName());
 
         PageOrderEntry newEntry = new PageOrderEntry();
         newEntry.setContentPage(contentPage);
         newEntry.setCategory(category);
-
-        List<PageOrderEntry> pages = category.getPages();
-        newEntry.setSequenceIndex(pages.size());
-        pages.add(newEntry);
-
-        category.setPages(pages);
-        categoryRepo.save(category);
+        int sizeOfCategory = pageOrderEntryRepo.findPageOrderEntriesByCategoryName(category.getName()).size();
+        newEntry.setSequenceIndex(sizeOfCategory);
 
         return pageOrderEntryRepo.save(newEntry);
     }
 
-    @Override
-    public PageOrderEntry addPageToCategory(ContentPage contentPage, Category category, int sequenceIndex) {
+    public PageOrderEntry addPageToCategoryAt(ContentPage contentPage, Category category, int sequenceIndex) {
         log.info("Adding page to category with name: {} in sequence index of: {}", category.getName(), sequenceIndex);
 
         PageOrderEntry newEntry = new PageOrderEntry();
         newEntry.setContentPage(contentPage);
         newEntry.setCategory(category);
 
-        List<PageOrderEntry> pages = category.getPages();
+        List<PageOrderEntry> pages = pageOrderEntryRepo.findPageOrderEntriesByCategoryName(category.getName());
 
-        // Check sequenceIndex bounds. If it's out of bounds, add to the end.
-        if (sequenceIndex < 0 || sequenceIndex >= pages.size()) {
-            newEntry.setSequenceIndex(pages.size());
-            pages.add(newEntry);
-        } else {
-            // Shift subsequent entries' sequenceIndices to accommodate the new entry.
-            for (int i = sequenceIndex; i < pages.size(); i++) {
-                pages.get(i).setSequenceIndex(i + 1);
-            }
-            newEntry.setSequenceIndex(sequenceIndex);
-            pages.add(sequenceIndex, newEntry);
-        }
+        // Adjust sequence index if it's out of bounds
+        sequenceIndex = Math.min(sequenceIndex, pages.size());
+        //move to end if less than 0
+        sequenceIndex = sequenceIndex<0 ? pages.size() : sequenceIndex;
+        newEntry.setSequenceIndex(sequenceIndex);
 
-        category.setPages(pages);
-        categoryRepo.save(category);
+        // Shift subsequent entries' sequenceIndices to accommodate the new entry.
+        int finalSequenceIndex = sequenceIndex;
+        pages.stream()
+                .filter(entry -> entry.getSequenceIndex() >= finalSequenceIndex)
+                .forEach(entry -> entry.setSequenceIndex(entry.getSequenceIndex() + 1));
 
+        pageOrderEntryRepo.saveAll(pages);
         return pageOrderEntryRepo.save(newEntry);
     }
 

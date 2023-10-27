@@ -16,9 +16,17 @@ public interface PageOrderEntryRepo extends JpaRepository<PageOrderEntry, Long> 
             "ORDER BY entry.sequenceIndex")
     List<ContentPage> findContentPagesByCategoryName(String categoryName);
 
+    @Query("SELECT entry " +
+            "FROM PageOrderEntry entry " +
+            "WHERE entry.category.name = :categoryName " +
+            "ORDER BY entry.sequenceIndex")
+    List<PageOrderEntry> findPageOrderEntriesByCategoryName(String categoryName);
+
+
+
     @Modifying
     @Transactional
-    @Query("DELETE entry From PageOrderEntry entry " +
+    @Query("DELETE From PageOrderEntry entry " +
             "WHERE entry.category.name = :categoryName")
     int deleteAllEntriesWithCategoryName(String categoryName);
 }

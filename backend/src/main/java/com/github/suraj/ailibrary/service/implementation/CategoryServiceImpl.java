@@ -73,16 +73,16 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepo.findByName(name);
     }
 
-    @Override
-    public PageOrderEntry addPageToCategory(ContentPage page, Category category) {
-        log.info("Adding page to category with name: {}", category.getName());
-
-        PageOrderEntry newEntry = new PageOrderEntry();
-        newEntry.setContentPage(page);
-        newEntry.setCategory(category);
-
-        return pageOrderEntryRepo.save(newEntry);
-    }
+//    @Override
+//    public PageOrderEntry addPageToCategory(ContentPage page, Category category) {
+//        log.info("Adding page to category with name: {}", category.getName());
+//
+//        PageOrderEntry newEntry = new PageOrderEntry();
+//        newEntry.setContentPage(page);
+//        newEntry.setCategory(category);
+//
+//        return pageOrderEntryRepo.save(newEntry);
+//    }
 
     @Override
     public List<ContentPage> getAllPagesWithCategoryName(String name) {

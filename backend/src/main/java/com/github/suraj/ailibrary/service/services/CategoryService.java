@@ -27,7 +27,7 @@ public interface CategoryService {
     Optional<Category> getCategoryByName(String name);
 
     // 7. Add ContentPage to Category of
-    PageOrderEntry addPageToCategory(ContentPage page, Category category);
+//    PageOrderEntry addPageToCategory(ContentPage page, Category category);
 
     // 8. Get All ContentPages in Category
     List<ContentPage> getAllPagesWithCategoryName(String name);

@@ -2,9 +2,11 @@ package com.github.suraj.ailibrary.resource;
 
 import com.github.suraj.ailibrary.model.Category;
 import com.github.suraj.ailibrary.model.ContentPage;
+import com.github.suraj.ailibrary.model.PageOrderEntry;
 import com.github.suraj.ailibrary.model.Response;
 import com.github.suraj.ailibrary.service.implementation.CategoryServiceImpl;
 import com.github.suraj.ailibrary.service.implementation.ContentPageServiceImpl;
+import com.github.suraj.ailibrary.service.implementation.PageOrderEntryServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ import java.util.Optional;
 public class CategoryResource {
     private final CategoryServiceImpl categoryServiceImpl;
     private final ContentPageServiceImpl contentPageServiceImpl;
+    private final PageOrderEntryServiceImpl pageOrderEntryServiceImpl;
 
     @GetMapping("/")
     public ResponseEntity<Response> getAllCategories() {
@@ -58,14 +61,15 @@ public class CategoryResource {
                 .orElseGet(() -> categoryServiceImpl.createCategory(categoryName));
         Optional<ContentPage> page = contentPageServiceImpl.getContentPageById(contentPageId);
         if(page.isPresent()){
-            ContentPage addedPage = categoryServiceImpl.addPageToCategory(page.get(), category).getContentPage();
+            PageOrderEntry addedPage = pageOrderEntryServiceImpl.addPageToCategory(page.get(), category);
+            List<ContentPage> categoryPages = categoryServiceImpl.getAllPagesWithCategoryName(categoryName);
             return ResponseEntity.ok(
                     Response.builder()
                             .timeStamp(LocalDateTime.now())
                             .status(HttpStatus.OK)
                             .statusCode(HttpStatus.OK.value())
-                            .message("Adding content-page to \""+categoryName+"\" Category")
-                            .data(Map.of("Categories",category))
+                            .message("Adding content-page to "+categoryName+" Category")
+                            .data(Map.of("ContentPages",categoryPages))
                             .build()
             );
         }

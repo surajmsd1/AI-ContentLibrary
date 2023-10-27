@@ -52,6 +52,9 @@ public class ContentPageResource {
     @PostMapping("/save")
     public ResponseEntity<Response> saveNewContentPage(@RequestBody @Valid ContentPage contentPage){
         ContentPage savedContentPage = contentPageServiceImpl.createContentPage(contentPage);
+        if (savedContentPage.getDate() == null) {
+            savedContentPage.setDate(LocalDateTime.now());
+        }
         return ResponseEntity.ok(
           Response.builder()
                 .timeStamp(LocalDateTime.now())
