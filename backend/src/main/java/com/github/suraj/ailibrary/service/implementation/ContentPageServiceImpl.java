@@ -4,6 +4,7 @@ import com.github.suraj.ailibrary.model.Category;
 import com.github.suraj.ailibrary.model.ContentPage;
 import com.github.suraj.ailibrary.model.PageOrderEntry;
 import com.github.suraj.ailibrary.repository.ContentPageRepo;
+import com.github.suraj.ailibrary.repository.PageOrderEntryRepo;
 import com.github.suraj.ailibrary.service.services.ContentPageService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @Slf4j
 public class ContentPageServiceImpl implements ContentPageService {
     private final ContentPageRepo contentPageRepo;
+    private final PageOrderEntryRepo pageOrderEntryRepo;
     @Override
     public ContentPage createContentPage(ContentPage contentPage) {
         log.info("Saving new ContentPage{}",contentPage.getPrompt());
@@ -48,7 +50,11 @@ public class ContentPageServiceImpl implements ContentPageService {
     public Boolean deleteContentPage(Long id) {
         log.info("Deleting ContentPage of id: {}",id);
         Boolean pagePresent = contentPageRepo.findById(id).isPresent();
-        if(pagePresent){contentPageRepo.deleteById(id);}
+        if(pagePresent)
+        {
+            pageOrderEntryRepo.deleteAllEntriesRelatedToContentPage(id);
+            contentPageRepo.deleteById(id);
+        }
         return pagePresent;
     }
 

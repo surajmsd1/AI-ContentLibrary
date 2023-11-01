@@ -29,4 +29,10 @@ public interface PageOrderEntryRepo extends JpaRepository<PageOrderEntry, Long> 
     @Query("DELETE From PageOrderEntry entry " +
             "WHERE entry.category.name = :categoryName")
     int deleteAllEntriesWithCategoryName(String categoryName);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE From PageOrderEntry entry WHERE entry.contentPage.id = :contentPageId")
+    void deleteAllEntriesRelatedToContentPage(Long contentPageId);
+
 }

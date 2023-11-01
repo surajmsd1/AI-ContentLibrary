@@ -12,3 +12,8 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
     showsql: true
+openai:
+  model: gpt-3.5-turbo
+  api:
+    url: https://api.openai.com/v1/chat/completions
+    key: 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
