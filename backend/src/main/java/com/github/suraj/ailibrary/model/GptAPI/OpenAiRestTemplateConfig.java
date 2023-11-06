@@ -6,12 +6,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
-//bean config
 @Configuration
 public class OpenAiRestTemplateConfig {
 
     @Value("${openai.api.key}")
     private String openaiApiKey;
+
+//    @Value("${openai.api.org}")
+//    private String openaiApiOrgKey;
 
     @Bean
     @Qualifier("openaiRestTemplate")
@@ -20,7 +22,7 @@ public class OpenAiRestTemplateConfig {
 
         restTemplate.getInterceptors().add((request, body, execution) -> {
             request.getHeaders().add("Authorization", "Bearer " + openaiApiKey);
-            System.out.println("Headers: " + request.getHeaders());
+//            request.getHeaders().add("OpenAI-Organization", openaiApiOrgKey);
             return execution.execute(request, body);
         });
 

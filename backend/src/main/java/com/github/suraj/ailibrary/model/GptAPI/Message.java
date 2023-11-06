@@ -1,19 +1,19 @@
 package com.github.suraj.ailibrary.model.GptAPI;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Message {
 
     private String role;
     private String content;
 
-    public Message(String user, String prompt) {
-        role = user;
-        content = prompt;
-    }
 
-    // constructor, getters and setters
+
 
 }
 

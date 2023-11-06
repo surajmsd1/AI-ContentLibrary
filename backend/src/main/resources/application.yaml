@@ -17,3 +17,4 @@ openai:
   api:
     url: https://api.openai.com/v1/chat/completions
     key: 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
+    org: org-nXZqDYDNS6hnULfimvRcKZQL
