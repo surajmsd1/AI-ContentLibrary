@@ -1,0 +1,53 @@
+<!-- <div class="container border justify-content-center">
+    <h1 >Technical Interview</h1>
+    <h3>Input Resume</h3>
+    <h4>Generate questions and display</h4>
+    <input [(ngModel)]="resume" class="w-70">
+</div> -->
+
+  
+  <div class="container" *ngIf="appState$ | async as appState">
+    <div *ngIf="appState.dataState === dataStateEnum.INITIAL_STATE">
+    <!-- Initial state UI -->
+        <div class="container d-flex justify-content-center">
+            <input class="w-50" [(ngModel)]="resume" type="text" placeholder="Enter resume">
+            <button class="btn btn-primary " (click)= "postResume()">Submit</button>
+        </div>
+        <p class="d-flex justify-content-center">*Please Remove Sensitive information and enter your Resume.</p>
+    </div>
+    <div *ngIf="appState.dataState === dataStateEnum.LOADING_STATE">
+      <!-- Loading state UI -->
+      <h4>Your Resume has been sent! Compiling questions to begin interview. *Other Loading UI*</h4>
+    </div>
+
+    <div *ngIf="appState.dataState === dataStateEnum.LOADED_STATE">
+      <!-- Loaded state UI, display the list of strings -->
+      <div class= "p-2 card container" *ngFor="let entry of interviewQuestions; let i = index">
+        <div class="card-header row" >
+            <h4 class="col-11">Question {{i+1}}: {{entry.question}}</h4>
+            <div class="col-2">  
+            </div>
+        </div>
+        <div>
+            <div class="card-body">
+                <input class="col-11" [(ngModel)]="interviewQuestions[i].answer" placeholder="Answer..." >
+                <button type="button" class="btn btn-default col-1" (click) = "getAnalysis(i)">
+                    Save
+                </button>
+            </div>
+        </div>
+        
+    </div>
+    <div class="col-10">
+      <input class="w-50" placeholder="Name:...">
+    </div>
+    <div class="col-2">
+      <button class="btn-default" (click) = "getAllAnalysis()" > Save All</button>
+    </div>
+    </div>
+
+    <div *ngIf="appState.dataState === dataStateEnum.ERROR_STATE">
+      <!-- Error state UI -->
+    </div>
+  </div>
+  

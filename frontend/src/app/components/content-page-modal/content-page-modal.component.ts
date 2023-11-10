@@ -23,7 +23,7 @@ export class ContentPageModalComponent implements OnInit{
   ngOnInit(): void {
     this.contentPageForm = this.initializeForm(this.editContentPage);
   }
-  
+
   initializeForm(contentPage?: ContentPage): FormGroup {
     const defaultValues = {
         prompt: '',

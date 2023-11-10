@@ -60,5 +60,5 @@ export class ContentPageService {
     console.log(error);
     return throwError(() => new Error(`An Error Occured - Error code: ${error.status}`));
   }
-
+  
 }
