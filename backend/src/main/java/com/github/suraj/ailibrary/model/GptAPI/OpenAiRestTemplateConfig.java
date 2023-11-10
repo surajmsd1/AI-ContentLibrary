@@ -19,7 +19,6 @@ public class OpenAiRestTemplateConfig {
     @Qualifier("openaiRestTemplate")
     public RestTemplate openAiTemplate(){
         RestTemplate restTemplate = new RestTemplate();
-
         restTemplate.getInterceptors().add((request, body, execution) -> {
             request.getHeaders().add("Authorization", "Bearer " + openaiApiKey);
 //            request.getHeaders().add("OpenAI-Organization", openaiApiOrgKey);

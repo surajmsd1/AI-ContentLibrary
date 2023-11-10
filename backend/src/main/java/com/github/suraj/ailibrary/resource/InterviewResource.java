@@ -1,7 +1,6 @@
 package com.github.suraj.ailibrary.resource;
 
 import com.github.suraj.ailibrary.model.GptAPI.Analysis.AnalysisRequest;
-import com.github.suraj.ailibrary.model.GptAPI.Analysis.Interview;
 import com.github.suraj.ailibrary.model.GptAPI.ChatRequest;
 import com.github.suraj.ailibrary.model.GptAPI.ChatResponse;
 import com.github.suraj.ailibrary.model.GptAPI.Message;
@@ -18,12 +17,13 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/interview")
 @RequiredArgsConstructor
-public class ChatResource {
+public class InterviewResource {
     private final InterviewServiceImpl interviewServiceImpl;
     @Autowired
     @Qualifier("openaiRestTemplate")
@@ -53,9 +53,12 @@ public class ChatResource {
         // create a request
         ChatRequest request = new ChatRequest(model);
         // add interview prompt
-        String interviewPrompt = "You are an tech interviewer," +
-                " given a resume/prompt you select all technologies mentioned in the resume/prompt. Then come up with technical questions" +
-                " to ask and evaluate the interviewee on technical skills. Respond only with the 10 questions.";
+        String interviewPrompt = "You are a tech interviewer." +
+                " Your task is to analyze the technologies listed in a resume/prompt." +
+                " Based on the technologies and skills mentioned, generate exactly 10 technical coding questions." +
+                " The questions should be focused on evaluating the candidate's proficiency" +
+                " in their technology stack, coding practices, and problem-solving skills." +
+                " Provide only the questions, with no additional explanations or content.";
         Message interviewInit = new Message("system", interviewPrompt);
         request.addMessage(interviewInit);
         // add Resume
@@ -85,7 +88,7 @@ public class ChatResource {
         request.addMessage(analysisInit);
         // add Resume
         Message QAMessage = new Message("user","Question:"+analysisRequest.getQuestion()
-                +"/n Answer:"+analysisRequest.getAnswer());
+                +"\n Answer:"+analysisRequest.getAnswer());
         request.addMessage(QAMessage);
 
         // call the API

@@ -1,8 +1,6 @@
 package com.github.suraj.ailibrary.service.services;
 
-import com.github.suraj.ailibrary.model.Category;
 import com.github.suraj.ailibrary.model.ContentPage;
-import com.github.suraj.ailibrary.model.PageOrderEntry;
 
 import java.util.List;
 import java.util.Optional;
