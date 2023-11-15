@@ -24,9 +24,17 @@ export class InterviewService {
       responseType: 'text' as 'json' // This tells HttpClient to handle the response as plain text.
     })
     .pipe(
-      tap(console.log),
+      // tap(console.log),
       catchError(this.handleError)
     );
+  }
+  getText$(blob: Blob): Observable<string> {
+    const formData = new FormData();
+    formData.append('file',blob, 'speech.wav');
+    return this.http.post<string>(`${this.interviewApiUrl}/speech-to-text`,formData, {responseType: 'Text' as 'json'}).pipe(
+      tap(console.log),
+      catchError(this.handleError)
+    )
   }
 
   handleError(error: HttpErrorResponse): Observable<never> {
