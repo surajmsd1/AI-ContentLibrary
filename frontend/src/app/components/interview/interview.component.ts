@@ -10,38 +10,92 @@ import { AnalysisRequest } from 'src/app/interfaces/analysis-request';
   styleUrls: ['./interview.component.css']
 })
 export class InterviewComponent {
+
   dataStateEnum = DataState;
-  resume: string = "Java Springboot angular Rest api";
+  resume: string = ""; // Java Springboot angular Rest api
+  difficulty: string = 'intermediate';
   interviewQuestions: { question: string, answer: string, analysis: string }[]=[];
+  overallAnalysis?: string;
   appState$:Observable<AppState<String[]>> = of({ dataState: DataState.INITIAL_STATE });
   audioChunks: Blob[] = [];
   mediaRecorder?: MediaRecorder;
-  isRecording: Boolean[] = [];
+  isRecording: Boolean[] = []; //keeps tracking of which question is being answered with mic
   //testmode: initializes 10 questions from array instead of fetching from gpt
-  testMode:Boolean = true;
+  testMode: Boolean = true;
+  topics: { name: string; src: string; short: string }[] = [
+    { name: "Java",
+      src: "assets/icons/java/java.svg",
+      short: "A versatile language for cross-platform applications."
+    },
+    { name: "React",
+      src: "assets/icons/reactjs/reactjs.svg",
+      short: "A library for building dynamic web user interfaces."
+    },
+    { name: "SQL",
+      src: "assets/icons/mysql/mysql.svg",
+      short: "Language for managing and querying relational databases."
+    },
+    { name: "HTML",
+      src: "assets/icons/html/html.svg",
+      short: "The standard markup language for web pages."
+    },
+    { name: "CSS",
+      src: "assets/icons/css/css.svg",
+      short: "Stylesheet language for designing web page layouts."
+    },
+    { name: "Angular",
+      src: "assets/icons/angular/angular.svg",
+      short: "A framework for building scalable web applications."
+    },
+    { name: "AWS",
+      src: "assets/icons/aws/aws.svg",
+      short: "A comprehensive cloud platform for diverse services."
+    },
+    { name: "REST Api",
+      src: "assets/icons/rest-api/rest-api.svg",
+      short: "Architectural style for networked applications."
+    },
+    { name: "Springboot",
+      src: "assets/icons/spring/spring.svg",
+      short: "A framework for easy Java-based applications development."
+    },
+    { name: "Python",
+      src: "assets/icons/python/python.svg",
+      short: "A language known for simplicity and versatility."
+    }
+  ];
+  timer: any;
+  elapsedTime: string = "00:00:00";
 
   constructor(
   private interviewService: InterviewService,
   private cdr: ChangeDetectorRef
   ){}
 
+  clear(i:number) {
+    this.interviewQuestions[i].answer = '';
+  }
+
   postResume() {
     // Trigger LOADING_STATE immediately when the function is called
     console.log("Sent Resume! Compiling questions!");
     if(!this.testMode){
     // Perform the HTTP request and update appState$ accordingly
-    this.appState$ = this.interviewService.getQuestions$(this.resume).pipe(
+    this.appState$ = this.interviewService.getQuestions$(this.resume, this.difficulty).pipe(
       map(response => {
         this.interviewQuestions = response.map(question => ({ question, answer: '',analysis: '' }));
         this.isRecording = new Array(this.interviewQuestions.length).fill(false);
         // Upon success, set the state back to LOADED_STATE
+        this.stopTimer();
         return { dataState: DataState.LOADED_STATE};//,appData: response };
       }),
       catchError((error: string) => {
         // Handle errors and update the state to ERROR_STATE
+        this.stopTimer();
         return of({ dataState: DataState.ERROR_STATE, error });
       }),
       startWith({dataState:DataState.LOADING_STATE}));
+      this.startTimer();
     }else{
       this.interviewQuestions = [{question:"Can you explain the concept of dependency injection in the Spring framework?",answer:"",analysis:""},
        {question:"How do you handle exceptions and errors in a Spring Boot application?",answer:"",analysis:""},
@@ -55,7 +109,26 @@ export class InterviewComponent {
        {question:"How do you integrate an Angular frontend with a Spring Boot backend to build a full-stack application?",answer:"",analysis:""}]
        this.appState$ = of({ dataState: DataState.LOADED_STATE });
       }
+  }
+  startTimer(){
+    console.log('timer started');
+    let startTime = Date.now();
+    this.timer = setInterval(()=>{
+      let currentTime = Date.now();
+      let timeElapsed = new Date(currentTime-startTime);
+      let hours = timeElapsed.getUTCHours().toString().padStart(2,'0');
+      let minutes = timeElapsed.getMinutes().toString().padStart(2,'0');
+      let seconds = timeElapsed.getSeconds().toString().padStart(2,'0');
+      this.elapsedTime = `${hours}:${minutes}:${seconds}`;
 
+    },1000);
+  }
+  stopTimer(){
+    if(this.timer){
+      clearInterval(this.timer);
+      this.timer= null;
+      this.elapsedTime = '00:00:00';
+    }
   }
   toggleRecording(i:number) {
     // this.interviewQuestions.map(question => (console.log(`{question:"${question.question}",answer:"${question.answer}",analysis:"${question.analysis}"},`)));
@@ -90,21 +163,24 @@ export class InterviewComponent {
         console.log("This is the transcription: "+ transcription);
         this.interviewQuestions[i].answer+=transcription;
         this.cdr.detectChanges();
-        console.log(this.interviewQuestions[i].answer);
+        this.getAnalysis(i);
+        // console.log(this.interviewQuestions[i].answer);
       });
     };
   }
 
-  uploadBlob(blob:Blob, callback: (transcription:string)=> void){
-    this.interviewService.getText$(blob).subscribe({next: (response)=>{
-      const parsedResponse = JSON.parse(response);
-      callback(parsedResponse.text);
-    },
-    error: (error) => {
-      console.error('Error fetching Transcription:', error);
-    }})
+  uploadBlob(blob: Blob, callback: (transcription: string) => void){
+    this.interviewService.getText$(blob).subscribe({
+      next: (response) => {
+        const parsedJson = JSON.parse(response); //parsed because in service response is treated as text, hacky
+        // console.log(parsedJson.text);
+        callback(parsedJson.text);
+      },
+      error: (error) => {
+        console.error('Error fetching Transcription:', error);
+      }
+    })
   }
-
 
   getAnalysis(index: number) {
     const request: AnalysisRequest = {
@@ -142,6 +218,24 @@ export class InterviewComponent {
         this.getAnalysis(index);
       }
     });
+  }
+
+  getOverallAnalysis(){
+    console.log("called");
+    this.interviewService.getOverallAnalysis$(this.interviewQuestions)
+    .subscribe({
+      next: (response) => {
+        console.log(response);
+        this.overallAnalysis = response;
+      },
+      error: (error) => {
+        console.error('Error fetching analysis:', error);
+      }
+    })
+  }
+
+  addTopic(name: string) {
+    this.resume += (' '+name+',');
   }
 }
 

@@ -5,25 +5,56 @@
     <input [(ngModel)]="resume" class="w-70">
 </div> -->
 
-  
   <div class="container" *ngIf="appState$ | async as appState">
     <div *ngIf="appState.dataState === dataStateEnum.INITIAL_STATE">
     <!-- Initial state UI -->
-        <div class="container d-flex justify-content-center">
-            <input class="w-50" [(ngModel)]="resume" (keyup.enter) = "postResume()" type="text" placeholder="Enter Resume Or Tech Stack...">
-            <button class="btn btn-primary " (click)= "postResume()">Submit</button>
+    <h4 class="text-center my-3 red">Enter Resume Or Select Technologies To Generate An Interview</h4>
+      <div class="container d-flex justify-content-center">
+          <input class="w-50" [(ngModel)]="resume" (keyup.enter) = "postResume()" type="text" placeholder="Enter here...">
+          <button class="btn btn-primary " (click)= "postResume()">Submit</button>
+      </div>
+      <p class="d-flex justify-content-center">*Please Remove Sensitive Information in Resume</p>
+
+      <div class="container d-flex justify-content-center my-3">
+        <div class="btn-group btn-group-lg" role="group" aria-label="Basic radio toggle button group">
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" [(ngModel)]="difficulty" value="easy">
+          <label class="btn btn-outline-primary" for="btnradio1">Beginner</label>
+
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" [(ngModel)]="difficulty" value="intermediate" checked>
+          <label class="btn btn-outline-primary" for="btnradio2">Intermediate</label>
+        
+          <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" [(ngModel)]="difficulty" value="advanced">
+          <label class="btn btn-outline-primary" for="btnradio3">Adanced</label>
         </div>
-        <p class="d-flex justify-content-center">*Please Remove Sensitive information*</p>
+      </div>
+
+      <div class="container-fluid">
+        <div class="row row-gap-4">
+          <div class="col-xxl-3 col-lg-4 col-md-6 col-sm-12" *ngFor="let topic of topics; let i = index">
+            <div class="card" style="width: 18rem;">
+              <!-- Adjust the following img tag -->
+              <img src={{topic.src}} class="card-img-top my-3" alt={{topic.name}} style="height: 100px; width: auto; display: block; margin-left: auto; margin-right: auto;">
+              <div class="card-body">
+                <h5 class="card-title">{{topic.name}}</h5>
+                <p class="card-text">{{topic.short}}</p>
+                <button (click) = "addTopic(topic.name)" class="btn btn-outline-primary">Add {{topic.name}}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        
     </div>
     <div *ngIf="appState.dataState === dataStateEnum.LOADING_STATE">
       <!-- Loading state UI -->
-      <h4>Your Resume has been sent! Compiling questions to begin interview. *Other Loading UI*</h4>
+      <h4>Your Resume has been sent! Compiling questions to begin interview.</h4>
+      <h4>Loading: Elapsed Time: {{ elapsedTime }} ~estimated time: 00:00:29</h4>
     </div>
 
     <div  *ngIf="appState.dataState === dataStateEnum.LOADED_STATE">
-      <div class="container justify-content-center">
-        <h4>Answer Questions to the best of your ability. Skip to Omit question.</h4>
-        <h6 class="bs-warning-bg-subtle ">Rating Scale: 0-3 = "familiar with", 3-5 = "satisfactory", 5-8 = "correct", 8-10 = "perfect". </h6>
+      <div class="container d-flex justify-content-center">
+        <h3 class="my-3">Answer Questions to the best of your ability. Skip to Omit question.</h3>
+        <!-- <h6 class="bs-warning-bg-subtle ">Rating Scale: 0-3 = "familiar with", 3-5 = "satisfactory", 5-8 = "correct", 8-10 = "perfect". </h6> -->
       </div>
       <!-- Loaded state UI, display the list of strings -->
       <div class= "p-2 card container" *ngFor="let entry of interviewQuestions; let i = index">
@@ -42,13 +73,13 @@
           </ng-container>
           <div class="container" *ngIf="entry.analysis === ''">
             <div class="card-body row">
-                <textarea class="col-10" [(ngModel)]="interviewQuestions[i].answer" placeholder="Answer..." ></textarea> 
-                <div class="gap-3 d-flex col-2">
-                  <button class="btn btn-outline-danger " type="button" (click)= "toggleRecording(i)">
-                    <i class="fa" [ngClass] = "isRecording[i] ? 'fa-stop' : 'fa-microphone'" aria-hidden="true"></i>
-                  </button>
-                  <button type="button" class="btn btn-outline-primary" (click) = "getAnalysis(i)">
-                    Save
+              <textarea readonly class="col-10" [(ngModel)]="interviewQuestions[i].answer" placeholder="Record Answer Here..." ></textarea> 
+              <div class="gap-3 d-flex col-2">
+                <button class="btn btn-outline-danger " type="button" (click)= "toggleRecording(i)">
+                  <i class="fa" [ngClass] = "isRecording[i] ? 'fa-stop' : 'fa-microphone'" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="btn btn-outline-primary" (click) = "clear(i)">
+                  Clear
                 </button>
               </div>
             </div>
@@ -60,6 +91,7 @@
         </div>
         <div class="col-2">
           <button class="btn-default" (click) = "getAllAnalysis()" > Save All</button>
+          <button class="btn-default" (click) = "getOverallAnalysis()" > Submit All</button>
         </div>
       </div>
     </div>
