@@ -1,6 +1,8 @@
 package com.github.suraj.ailibrary.resource;
 
-import com.github.suraj.ailibrary.model.GptAPI.Analysis.AnalysisRequest;
+import com.github.suraj.ailibrary.model.GptAPI.Analysis.AnalysisRequestDTO;
+import com.github.suraj.ailibrary.model.GptAPI.Analysis.QAADTO;
+import com.github.suraj.ailibrary.model.GptAPI.Analysis.QuestionsRequestDTO;
 import com.github.suraj.ailibrary.model.GptAPI.ChatRequest;
 import com.github.suraj.ailibrary.model.GptAPI.ChatResponse;
 import com.github.suraj.ailibrary.model.GptAPI.Message;
@@ -9,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
@@ -23,7 +24,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -62,29 +62,22 @@ public class InterviewResource {
     }
 
     @PostMapping("/getQuestions")
-    public ResponseEntity<List<String>> interview(@RequestBody String resume) {
+    public ResponseEntity<List<String>> interview(@RequestBody QuestionsRequestDTO requestDTO) {
         // create a request
         ChatRequest request = new ChatRequest(model);
         // add interview prompt
         String interviewPrompt = "You are a tech interviewer." +
                 " Your task is to analyze the technologies listed in a resume/prompt." +
-                " Based on the technologies and skills mentioned, generate exactly 10 technical interview questions." +
+                " Based on the technologies and skills mentioned, generate exactly "+ requestDTO.getDifficulty() +"10 technical interview questions." +
                 " The questions should be focused on evaluating the candidate's " +
                 " knowledge of their technology stack, ability to work, and work experience." +
                 " Provide only the questions, with no additional explanations or content.";
-//        String interviewPrompt = "You are a tech interviewer." +
-//                " Your task is to analyze the technologies listed in a resume/prompt." +
-//                " Based on the technologies and skills mentioned, generate exactly 10 technical coding questions." +
-//                " The questions should be focused on evaluating the candidate's proficiency" +
-//                " by asking basic coding questions in their language, then ask deeper coding questions related to their technology stack." +
-//                " Provide only the questions, with no additional explanations or content.";
 
         Message interviewInit = new Message("system", interviewPrompt);
         request.addMessage(interviewInit);
         // add Resume
-        Message Resume = new Message("user",resume);
+        Message Resume = new Message("user", requestDTO.getResume());
         request.addMessage(Resume);
-
         // call the API
         ChatResponse response = restTemplate.postForObject(apiUrl, request, ChatResponse.class);
         if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
@@ -97,8 +90,9 @@ public class InterviewResource {
         //Interview interview =interviewServiceImpl.createAndInitInterview(questionList);
         return ResponseEntity.ok(questionList);
     }
+
     @PostMapping("/getAnalysis")
-    public ResponseEntity<String> analysis(@RequestBody AnalysisRequest analysisRequest) {
+    public ResponseEntity<String> analysis(@RequestBody AnalysisRequestDTO analysisRequest) {
         // create a request
         ChatRequest request = new ChatRequest(model);
         // add interview prompt
@@ -121,12 +115,30 @@ public class InterviewResource {
         String analysis = response.getChoices().get(0).getMessage().getContent();
         return ResponseEntity.ok(analysis);
     }
+
+    @PostMapping("/getOverallAnalysis")
+    public ResponseEntity<String> getOverAllAnalysis(@RequestBody List<QAADTO> QAAlist ){
+        ChatRequest request = new ChatRequest(model);
+        String overallInit = "Write a report on how well the interviewee understands their technology stack using the answers and analysis to the questions. Interviewee skipped the question if answer and analysis is blank" +
+                "What software job level is the interviewee at?. Add the overall score they received.";
+        Message prompt  = new Message("system",overallInit);
+        request.addMessage(prompt);
+
+        for (QAADTO each : QAAlist) {
+            System.out.println("Question: "+each.question+"\nAnswer: "+each.answer+"\nAnalysis : "+each.analysis);
+            request.addMessage(new Message("user","\nQuestion: "+each.question+"\nAnswer: "+each.answer+"Analysis : "+each.analysis));
+        }
+        ChatResponse result = restTemplate.postForObject(apiUrl,request,ChatResponse.class);
+        String overallAnalysis =result.getChoices().get(0).getMessage().getContent();
+        System.err.println(overallAnalysis);
+        return ResponseEntity.ok(overallAnalysis);
+    }
+
     @PostMapping("/speech-to-text")
     public ResponseEntity<String> speechToText(@RequestParam("file") MultipartFile file) throws IOException {
         if (file.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File is empty.");
         }
-
         // Save the MultipartFile to a temporary file
         File tempFile = File.createTempFile("upload", ".wav");
         file.transferTo(tempFile);
@@ -144,13 +156,12 @@ public class InterviewResource {
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
         String url = "https://api.openai.com/v1/audio/transcriptions";
-        ResponseEntity<String> response = restAudioTemplate.postForEntity(url, requestEntity, String.class);
+        String response = restAudioTemplate.postForObject(url, requestEntity, String.class);
         // Clean up the temporary file
         tempFile.delete();
-
-        return response;
+        System.err.println(response);
+        return ResponseEntity.ok(response);
     }
-
 
     private static List<String> splitQuestions(String text) {
         // Pattern for finding the numbers followed by a dot and a space, considering multiline.

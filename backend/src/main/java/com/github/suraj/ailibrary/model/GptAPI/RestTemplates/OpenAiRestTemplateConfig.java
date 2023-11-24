@@ -1,4 +1,4 @@
-package com.github.suraj.ailibrary.model.GptAPI;
+package com.github.suraj.ailibrary.model.GptAPI.RestTemplates;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

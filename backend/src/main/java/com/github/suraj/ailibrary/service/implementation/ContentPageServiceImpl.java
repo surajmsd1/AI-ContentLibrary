@@ -1,8 +1,6 @@
 package com.github.suraj.ailibrary.service.implementation;
 
-import com.github.suraj.ailibrary.model.Category;
-import com.github.suraj.ailibrary.model.ContentPage;
-import com.github.suraj.ailibrary.model.PageOrderEntry;
+import com.github.suraj.ailibrary.model.ContentPages.ContentPage;
 import com.github.suraj.ailibrary.repository.ContentPageRepo;
 import com.github.suraj.ailibrary.repository.PageOrderEntryRepo;
 import com.github.suraj.ailibrary.service.services.ContentPageService;

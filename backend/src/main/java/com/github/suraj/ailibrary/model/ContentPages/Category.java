@@ -1,4 +1,4 @@
-package com.github.suraj.ailibrary.model;
+package com.github.suraj.ailibrary.model.ContentPages;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;

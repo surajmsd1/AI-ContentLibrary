@@ -1,9 +1,9 @@
 package com.github.suraj.ailibrary.resource;
 
-import com.github.suraj.ailibrary.model.Category;
-import com.github.suraj.ailibrary.model.ContentPage;
-import com.github.suraj.ailibrary.model.PageOrderEntry;
-import com.github.suraj.ailibrary.model.Response;
+import com.github.suraj.ailibrary.model.ContentPages.Category;
+import com.github.suraj.ailibrary.model.ContentPages.ContentPage;
+import com.github.suraj.ailibrary.model.ContentPages.PageOrderEntry;
+import com.github.suraj.ailibrary.model.ContentPages.Response;
 import com.github.suraj.ailibrary.service.implementation.CategoryServiceImpl;
 import com.github.suraj.ailibrary.service.implementation.ContentPageServiceImpl;
 import com.github.suraj.ailibrary.service.implementation.PageOrderEntryServiceImpl;

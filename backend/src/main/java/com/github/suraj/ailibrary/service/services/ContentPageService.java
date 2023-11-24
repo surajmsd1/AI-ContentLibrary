@@ -1,6 +1,6 @@
 package com.github.suraj.ailibrary.service.services;
 
-import com.github.suraj.ailibrary.model.ContentPage;
+import com.github.suraj.ailibrary.model.ContentPages.ContentPage;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,7 +1,7 @@
 package com.github.suraj.ailibrary.resource;
 
-import com.github.suraj.ailibrary.model.ContentPage;
-import com.github.suraj.ailibrary.model.Response;
+import com.github.suraj.ailibrary.model.ContentPages.ContentPage;
+import com.github.suraj.ailibrary.model.ContentPages.Response;
 import com.github.suraj.ailibrary.service.implementation.ContentPageServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

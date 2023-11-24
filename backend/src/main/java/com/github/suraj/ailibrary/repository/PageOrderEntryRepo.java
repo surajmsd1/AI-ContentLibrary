@@ -1,7 +1,7 @@
 package com.github.suraj.ailibrary.repository;
 
-import com.github.suraj.ailibrary.model.ContentPage;
-import com.github.suraj.ailibrary.model.PageOrderEntry;
+import com.github.suraj.ailibrary.model.ContentPages.ContentPage;
+import com.github.suraj.ailibrary.model.ContentPages.PageOrderEntry;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

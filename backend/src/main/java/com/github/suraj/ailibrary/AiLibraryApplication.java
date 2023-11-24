@@ -1,10 +1,8 @@
 package com.github.suraj.ailibrary;
 
-import com.github.suraj.ailibrary.model.Category;
-import com.github.suraj.ailibrary.model.ContentPage;
-import com.github.suraj.ailibrary.model.GptAPI.ChatRequest;
-import com.github.suraj.ailibrary.model.GptAPI.ChatResponse;
-import com.github.suraj.ailibrary.model.PageOrderEntry;
+import com.github.suraj.ailibrary.model.ContentPages.Category;
+import com.github.suraj.ailibrary.model.ContentPages.ContentPage;
+import com.github.suraj.ailibrary.model.ContentPages.PageOrderEntry;
 import com.github.suraj.ailibrary.repository.CategoryRepo;
 import com.github.suraj.ailibrary.repository.ContentPageRepo;
 
@@ -52,7 +50,6 @@ public class AiLibraryApplication {
 			} else {
 				System.out.println("Data already exists. Skipping insertion.");
 			}
-
 		};
 	}
 

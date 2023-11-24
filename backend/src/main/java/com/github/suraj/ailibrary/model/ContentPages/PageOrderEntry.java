@@ -1,4 +1,4 @@
-package com.github.suraj.ailibrary.model;
+package com.github.suraj.ailibrary.model.ContentPages;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
