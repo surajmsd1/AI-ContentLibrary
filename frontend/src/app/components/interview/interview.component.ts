@@ -15,13 +15,13 @@ export class InterviewComponent {
   resume: string = ""; // Java Springboot angular Rest api
   difficulty: string = 'intermediate';
   interviewQuestions: { question: string, answer: string, analysis: string }[]=[];
-  overallAnalysis?: string;
+  overallAnalysis: string = '';
   appState$:Observable<AppState<String[]>> = of({ dataState: DataState.INITIAL_STATE });
   audioChunks: Blob[] = [];
   mediaRecorder?: MediaRecorder;
   isRecording: Boolean[] = []; //keeps tracking of which question is being answered with mic
   //testmode: initializes 10 questions from array instead of fetching from gpt
-  testMode: Boolean = true;
+  testMode: Boolean = false;
   topics: { name: string; src: string; short: string }[] = [
     { name: "Java",
       src: "assets/icons/java/java.svg",
@@ -62,7 +62,11 @@ export class InterviewComponent {
     { name: "Python",
       src: "assets/icons/python/python.svg",
       short: "A language known for simplicity and versatility."
-    }
+    },
+    // { name: "Microserives",
+    //   src: "assets/icons/microservices/Microservices.png",
+    //   short: "An Architectural style for large projects."
+    // }
   ];
   timer: any;
   elapsedTime: string = "00:00:00";
@@ -74,6 +78,8 @@ export class InterviewComponent {
 
   clear(i:number) {
     this.interviewQuestions[i].answer = '';
+    this.interviewQuestions[i].analysis = '';
+    this.cdr.detectChanges();
   }
 
   postResume() {
@@ -97,7 +103,7 @@ export class InterviewComponent {
       startWith({dataState:DataState.LOADING_STATE}));
       this.startTimer();
     }else{
-      this.interviewQuestions = [{question:"Can you explain the concept of dependency injection in the Spring framework?",answer:"",analysis:""},
+      this.interviewQuestions = [{question:"Can you explain the concept of dependency injection in the Spring framework?",answer:"the idea of not using new to create objects and use DI to inject objects in a singleton pattern, and have a central location to change injected dependencies.",analysis:""},
        {question:"How do you handle exceptions and errors in a Spring Boot application?",answer:"",analysis:""},
        {question:"Can you describe the role of Angular in building single-page applications?",answer:"",analysis:""},
        {question:"How do you implement routing in Angular applications?",answer:"",analysis:""},
@@ -110,6 +116,7 @@ export class InterviewComponent {
        this.appState$ = of({ dataState: DataState.LOADED_STATE });
       }
   }
+
   startTimer(){
     console.log('timer started');
     let startTime = Date.now();
@@ -123,6 +130,7 @@ export class InterviewComponent {
 
     },1000);
   }
+
   stopTimer(){
     if(this.timer){
       clearInterval(this.timer);
@@ -130,12 +138,21 @@ export class InterviewComponent {
       this.elapsedTime = '00:00:00';
     }
   }
+
   toggleRecording(i:number) {
     // this.interviewQuestions.map(question => (console.log(`{question:"${question.question}",answer:"${question.answer}",analysis:"${question.analysis}"},`)));
-    this.isRecording[i] ? this.stopRecording(i) : this.startRecording(i);
+    // this.isRecording[i] ? this.stopRecording(i) : this.startRecording(i);
+    if(this.isRecording[i]){
+      this.stopRecording(i);
+    }else{
+      this.startRecording(i);
+    }
   }
 
   startRecording(i:number) {
+    if (this.isRecording[i]) {
+      return; // Recording already in progress, don't start another one
+    }
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then(stream => {
         this.mediaRecorder = new MediaRecorder(stream);
@@ -144,27 +161,31 @@ export class InterviewComponent {
         };
         this.mediaRecorder.start();
         this.isRecording[i] = true;
+        this.cdr.detectChanges();
       })
       .catch(error => console.error('Error accessing media devices.', error));
   }
 
   //add index for specific question icon feedback
   stopRecording(i:number) {
+    if (!this.isRecording[i]) {
+      return; // No recording in progress, nothing to stop
+    }
     this.mediaRecorder!.stop();
     this.isRecording[i] = false;    
+    this.cdr.detectChanges();
     this.mediaRecorder!.onstop = () => {
       const audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
       this.audioChunks = [];
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const audio = new Audio(audioUrl);
-      audio.play();
+      // const audioUrl = URL.createObjectURL(audioBlob);
+      // const audio = new Audio(audioUrl);
+      // audio.play();
       console.log("Fetching Transcription...");
       this.uploadBlob(audioBlob,(transcription)=>{
         console.log("This is the transcription: "+ transcription);
         this.interviewQuestions[i].answer+=transcription;
         this.cdr.detectChanges();
         this.getAnalysis(i);
-        // console.log(this.interviewQuestions[i].answer);
       });
     };
   }
@@ -197,6 +218,7 @@ export class InterviewComponent {
         .subscribe({
           next: (response) => {
             this.interviewQuestions[index].analysis = response;
+            this.cdr.detectChanges();
             console.log(`Feedback for question ${index+1}.\n`+`
                 Question: ${this.interviewQuestions[index].question}.\n`+`
                 Answer: ${this.interviewQuestions[index].answer}.\n`+`
@@ -221,6 +243,7 @@ export class InterviewComponent {
   }
 
   getOverallAnalysis(){
+    this.appState$ = of({ dataState: DataState.FINISHED_STATE });
     console.log("called");
     this.interviewService.getOverallAnalysis$(this.interviewQuestions)
     .subscribe({

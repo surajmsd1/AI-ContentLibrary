@@ -8,12 +8,12 @@
   <div class="container" *ngIf="appState$ | async as appState">
     <div *ngIf="appState.dataState === dataStateEnum.INITIAL_STATE">
     <!-- Initial state UI -->
-    <h4 class="text-center my-3 red">Enter Resume Or Select Technologies To Generate An Interview</h4>
+    <h4 class="text-center my-3 ">Select Technologies To Generate Interview</h4>
       <div class="container d-flex justify-content-center">
           <input class="w-50" [(ngModel)]="resume" (keyup.enter) = "postResume()" type="text" placeholder="Enter here...">
           <button class="btn btn-primary " (click)= "postResume()">Submit</button>
       </div>
-      <p class="d-flex justify-content-center">*Please Remove Sensitive Information in Resume</p>
+      <!-- <p class="d-flex justify-content-center">*Please Remove Sensitive Information in Resume</p> -->
 
       <div class="container d-flex justify-content-center my-3">
         <div class="btn-group btn-group-lg" role="group" aria-label="Basic radio toggle button group">
@@ -43,55 +43,70 @@
           </div>
         </div>
       </div>
-        
     </div>
-    <div *ngIf="appState.dataState === dataStateEnum.LOADING_STATE">
-      <!-- Loading state UI -->
-      <h4>Your Resume has been sent! Compiling questions to begin interview.</h4>
-      <h4>Loading: Elapsed Time: {{ elapsedTime }} ~estimated time: 00:00:29</h4>
+    <!-- Loading state UI -->   
+    <div class="container d-flex justify-content-center"  *ngIf="appState.dataState === dataStateEnum.LOADING_STATE">
+      <div>
+          <h3 class="text-center">Compiling questions to begin interview.</h3>
+          <div class="d-flex align-items-center">  
+            <h3>Loading: Elapsed Time: {{ elapsedTime }} ~estimated time: 00:00:29</h3>
+            <!-- refrest spinner -->
+          </div>
+          <div class="d-flex justify-content-center">
+            <i class="fa fa-refresh fa-spin fa-5x fa-fw "></i>
+              <span class="sr-only">Loading...</span>
+          </div>
+      </div>
     </div>
 
     <div  *ngIf="appState.dataState === dataStateEnum.LOADED_STATE">
       <div class="container d-flex justify-content-center">
-        <h3 class="my-3">Answer Questions to the best of your ability. Skip to Omit question.</h3>
+        <h3 class="my-3">Answer Questions to the best of your ability. Use examples when applicable.</h3>
+        
         <!-- <h6 class="bs-warning-bg-subtle ">Rating Scale: 0-3 = "familiar with", 3-5 = "satisfactory", 5-8 = "correct", 8-10 = "perfect". </h6> -->
       </div>
-      <!-- Loaded state UI, display the list of strings -->
+
+      <!-- Loaded state UI -->
       <div class= "p-2 card container" *ngFor="let entry of interviewQuestions; let i = index">
         <div class="card-header row" >
             <h4 class="col-11">Question {{i+1}}: {{entry.question}}</h4>
         </div>
-          <ng-container class="container" *ngIf="entry.analysis !== ''">
-              <div class="card-body">
-                  <textarea class="col-10 " [(ngModel)]="interviewQuestions[i].answer" placeholder="Answer..." ></textarea> 
-                  <button type="button" class="btn btn-danger-outline col-2" (click) = "getAnalysis(i)">
-                      Retry
-                  </button>
-                  <h5>Analysis: </h5>
-                  <p>{{entry.analysis}}</p>
-              </div>
-          </ng-container>
-          <div class="container" *ngIf="entry.analysis === ''">
-            <div class="card-body row">
-              <textarea readonly class="col-10" [(ngModel)]="interviewQuestions[i].answer" placeholder="Record Answer Here..." ></textarea> 
-              <div class="gap-3 d-flex col-2">
-                <button class="btn btn-outline-danger " type="button" (click)= "toggleRecording(i)">
-                  <i class="fa" [ngClass] = "isRecording[i] ? 'fa-stop' : 'fa-microphone'" aria-hidden="true"></i>
-                </button>
-                <button type="button" class="btn btn-outline-primary" (click) = "clear(i)">
-                  Clear
-                </button>
-              </div>
+        <div class="container" *ngIf="entry.analysis === ''">
+          <div class="card-body row">
+            <textarea readonly class="col-10" [(ngModel)]="interviewQuestions[i].answer" placeholder="Record Answer Here..." ></textarea> 
+            <div class="gap-3 d-flex col-2">
+              <button class="btn btn-outline-danger " type="button" (click)= "toggleRecording(i)">
+                <i class="fa" [ngClass] = "isRecording[i] ? 'fa-stop' : 'fa-microphone'" aria-hidden="true"></i>
+              </button>
+              <button type="button" class="btn btn-outline-primary" (click) = "clear(i)">
+                Clear
+              </button>
             </div>
-          </div> 
+          </div>
+        </div>
+
+        <ng-container class="container" *ngIf="entry.analysis !== ''">
+          <div class="card-body row">
+            <textarea readonly class="col-10" [(ngModel)]="interviewQuestions[i].answer" placeholder="Record Answer Here..." ></textarea> 
+            <div class="gap-3 d-flex col-2">
+              <button class="btn btn-outline-danger " type="button" (click)= "toggleRecording(i)">
+                <i class="fa" [ngClass] = "isRecording[i] ? 'fa-stop' : 'fa-microphone'" aria-hidden="true"></i>
+              </button>
+              <button type="button" class="btn btn-outline-primary" (click) = "clear(i)">
+                Clear
+              </button>
+              <i class="fa fa-check-circle-o fa-3x" aria-hidden="true" style="color: green;"></i>
+            </div>
+          </div>
+        </ng-container>    
       </div>
+
       <div class="container d-flex justify-content-center border">
         <div class="col-10">
-          <input class="w-20" placeholder="Name">
+          <!-- <input class="w-40" placeholder="Name"> -->
         </div>
         <div class="col-2">
-          <button class="btn-default" (click) = "getAllAnalysis()" > Save All</button>
-          <button class="btn-default" (click) = "getOverallAnalysis()" > Submit All</button>
+          <button class="btn btn-primary" (click) = "getOverallAnalysis()" > Submit All</button>
         </div>
       </div>
     </div>
@@ -99,5 +114,29 @@
     <div *ngIf="appState.dataState === dataStateEnum.ERROR_STATE">
       <!-- Error state UI -->
     </div>
+    <div *ngIf="appState.dataState === dataStateEnum.FINISHED_STATE">
+      <div class= "p-2 card container" *ngIf='overallAnalysis!== ""'>
+        <div class="card-header row" >
+          <h3 class="col-11">Overall Performance: </h3>
+      </div>
+      <div class="card-body row">
+        <h4 class="col-11">AI-Recruiter: {{overallAnalysis}}</h4>
+      </div>
+
+      </div>
+      <div class= "p-2 card container" *ngFor="let entry of interviewQuestions; let i = index">
+        <div class="card-header row" >
+            <h4 class="col-11">Question {{i+1}}: {{entry.question}}</h4>
+        </div>
+        <div class="card-body row">
+          <h4>Their Answer: </h4>
+          <h5 class="col-10 border " *ngIf="interviewQuestions[i].answer!==''">{{interviewQuestions[i].answer}}</h5>
+          <h5 class="col-10 border " *ngIf="interviewQuestions[i].answer===''">No answer provided</h5> 
+        </div>
+        <div class="card-body row">
+          <h4>AI Analysis: </h4>
+          <h5 class="col-10 border " *ngIf="interviewQuestions[i].analysis!==''">{{interviewQuestions[i].analysis}}</h5>
+          <h5 class="col-10 border " *ngIf="interviewQuestions[i].analysis===''">No answer provided to analyze</h5> 
+        </div>
+    </div>
   </div>
-  
