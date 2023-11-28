@@ -68,8 +68,8 @@ public class InterviewResource {
         // add interview prompt
         String interviewPrompt = "You are a tech interviewer." +
                 " Your task is to analyze the technologies listed in a resume/prompt." +
-                " Based on the technologies and skills mentioned, generate exactly "+ requestDTO.getDifficulty() +"10 technical interview questions." +
-                " The questions should be focused on evaluating the candidate's " +
+                " Based on the technologies and skills mentioned, generate exactly "+ requestDTO.getDifficulty() +"10 " +
+                "technical interview questions. The questions should be focused on evaluating the candidate's " +
                 " knowledge of their technology stack, ability to work, and work experience." +
                 " Provide only the questions, with no additional explanations or content.";
 
@@ -96,9 +96,10 @@ public class InterviewResource {
         // create a request
         ChatRequest request = new ChatRequest(model);
         // add interview prompt
-        String analysisPrompt = "You are a tech interview assistant. Given a question and answer transcribed from audio, evaluate how well they answered the question. " +
-                "Keep in mind that the interviewees can only speak the answer, so don't take off for their inability to show you clear code. " +
-                "Rate the answer out of 10 in the following format: <Rating: #/10>.";
+        String analysisPrompt = "You are a tech interview assistant. Given a question and answer transcribed from audio," +
+                " evaluate how well they answered the question. Keep in mind that the interviewees can only speak the " +
+                "answer, so don't take off for their inability to show you clear code. Rate the answer out of 10 in the " +
+                "following format: <Rating: #/10>.";
         Message analysisInit = new Message("system", analysisPrompt);
         request.addMessage(analysisInit);
         // add Resume
@@ -119,14 +120,18 @@ public class InterviewResource {
     @PostMapping("/getOverallAnalysis")
     public ResponseEntity<String> getOverAllAnalysis(@RequestBody List<QAADTO> QAAlist ){
         ChatRequest request = new ChatRequest(model);
-        String overallInit = "Write a report on how well the interviewee understands their technology stack using the answers and analysis to the questions. Interviewee skipped the question if answer and analysis is blank" +
-                "What software job level is the interviewee at?. Add the overall score they received.";
+        String overallInit = "Write a short easy to understand report on how well the interviewee understands the" +
+                " technology stack using the answers and analysis to the questions. Interviewee skipped the question" +
+                " if answer and analysis is blank." +
+                "What software job level is the interviewee at?. Add the average score they received in the following" +
+                " format: <Rating: #/10>.";
         Message prompt  = new Message("system",overallInit);
         request.addMessage(prompt);
 
         for (QAADTO each : QAAlist) {
             System.out.println("Question: "+each.question+"\nAnswer: "+each.answer+"\nAnalysis : "+each.analysis);
-            request.addMessage(new Message("user","\nQuestion: "+each.question+"\nAnswer: "+each.answer+"Analysis : "+each.analysis));
+            request.addMessage(new Message("user","\nQuestion: "+each.question+"\nAnswer: "+each.answer+
+                    "Analysis : "+each.analysis));
         }
         ChatResponse result = restTemplate.postForObject(apiUrl,request,ChatResponse.class);
         String overallAnalysis =result.getChoices().get(0).getMessage().getContent();
