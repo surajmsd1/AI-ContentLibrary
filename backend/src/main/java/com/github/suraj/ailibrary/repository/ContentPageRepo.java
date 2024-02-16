@@ -1,6 +1,6 @@
 package com.github.suraj.ailibrary.repository;
 
-import com.github.suraj.ailibrary.model.ContentPage;
+import com.github.suraj.ailibrary.model.ContentPages.ContentPage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -1,10 +1,8 @@
 package com.github.suraj.ailibrary;
 
-import com.github.suraj.ailibrary.model.Category;
-import com.github.suraj.ailibrary.model.ContentPage;
-import com.github.suraj.ailibrary.model.GptAPI.ChatRequest;
-import com.github.suraj.ailibrary.model.GptAPI.ChatResponse;
-import com.github.suraj.ailibrary.model.PageOrderEntry;
+import com.github.suraj.ailibrary.model.ContentPages.Category;
+import com.github.suraj.ailibrary.model.ContentPages.ContentPage;
+import com.github.suraj.ailibrary.model.ContentPages.PageOrderEntry;
 import com.github.suraj.ailibrary.repository.CategoryRepo;
 import com.github.suraj.ailibrary.repository.ContentPageRepo;
 
@@ -16,7 +14,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -38,7 +35,7 @@ public class AiLibraryApplication {
 				categoryRepo.saveAll(Arrays.asList(javaCategory, jsCategory));
 
 				// 2. Create Content Pages
-				ContentPage jsPage1 = new ContentPage(null, "How to declare a variable in JavaScript?", "...", "GPT-3", LocalDateTime.now(), "Yes", 5);
+				ContentPage jsPage1 = new ContentPage(null, "How to declare a variable in JavaScript?", "var name = value;", "GPT-3", LocalDateTime.now(), "Yes", 5);
 				ContentPage jsPage2 = new ContentPage(null, "Explain JavaScript closures.", "...", "GPT-3", LocalDateTime.now(), "Yes", 5);
 				contentPageRepo.saveAll(Arrays.asList(jsPage1, jsPage2));
 
@@ -52,7 +49,6 @@ public class AiLibraryApplication {
 			} else {
 				System.out.println("Data already exists. Skipping insertion.");
 			}
-
 		};
 	}
 

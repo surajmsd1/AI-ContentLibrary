@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { InterviewComponent } from './components/interview/interview.component';
 import { ContentPagesComponent } from './components/content-pages/content-pages.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 const appRoutes: Routes= [
   { path: '', component: HomepageComponent},
@@ -30,7 +31,8 @@ const appRoutes: Routes= [
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    FontAwesomeModule
   ],
   providers: [BsModalService],
   bootstrap: [AppComponent]
