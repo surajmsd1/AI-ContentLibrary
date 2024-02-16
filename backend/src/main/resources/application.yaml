@@ -17,8 +17,9 @@ openai:
     url: https://api.openai.com/v1/chat/completions
     key: sk-0AJL2a0bYUdyxdMOf3NOTAKEYWQU15mMyzW1
 server:
-  ip-address: 'localhost'
+  ip_address: 'localhost'
+  
 
 sql:
-  username: LibraryApp
-  password: LibraryApp2!
+  username: 'libraryapp'
+  password: 'libraryApp2!'
