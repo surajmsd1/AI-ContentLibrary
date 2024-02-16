@@ -1,4 +1,4 @@
-package com.github.suraj.ailibrary.resource;
+package com.github.suraj.ailibrary.controllers;
 
 import com.github.suraj.ailibrary.model.ContentPages.Category;
 import com.github.suraj.ailibrary.model.ContentPages.ContentPage;

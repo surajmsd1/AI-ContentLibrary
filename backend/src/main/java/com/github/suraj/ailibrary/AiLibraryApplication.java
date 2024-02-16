@@ -35,7 +35,7 @@ public class AiLibraryApplication {
 				categoryRepo.saveAll(Arrays.asList(javaCategory, jsCategory));
 
 				// 2. Create Content Pages
-				ContentPage jsPage1 = new ContentPage(null, "How to declare a variable in JavaScript?", "...", "GPT-3", LocalDateTime.now(), "Yes", 5);
+				ContentPage jsPage1 = new ContentPage(null, "How to declare a variable in JavaScript?", "var name = value;", "GPT-3", LocalDateTime.now(), "Yes", 5);
 				ContentPage jsPage2 = new ContentPage(null, "Explain JavaScript closures.", "...", "GPT-3", LocalDateTime.now(), "Yes", 5);
 				contentPageRepo.saveAll(Arrays.asList(jsPage1, jsPage2));
 

@@ -1,16 +1,14 @@
 spring:
   datasource:
-    url: jdbc:mysql://${server.ip-address}:3306/librarydb
-    username: libraryapp
-    password: libraryApp2!
-#    username: LibraryApp
-#    password: LibraryApp
+    url: jdbc:mysql://${server.ip_address}:3306/librarydb
+    username: ${sql.username}
+    password: ${sql.password}
   jpa:
     hibernate:
       ddl-auto: validate
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
     showsql: true
 openai:
@@ -20,3 +18,7 @@ openai:
     key: sk-0AJL2a0bYUdyxdMOf3NOTAKEYWQU15mMyzW1
 server:
   ip-address: 'localhost'
+
+sql:
+  username: LibraryApp
+  password: LibraryApp2!
