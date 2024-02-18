@@ -1,0 +1,32 @@
+
+version: '3.8'
+services:
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: Surya123*
+      MYSQL_DATABASE: librarydb
+      MYSQL_USER: springbootuser 
+      MYSQL_PASSWORD: libraryApp2!
+    volumes:
+      - ./init-scripts:/docker-entrypoint-initdb.d # Custom SQL scripts
+    networks:
+      - my-network
+
+  app:
+    build: 
+      context: .
+    environment:
+      SERVER_IP_ADDRESS: db
+      SQL_USERNAME: springbootuser
+      SQL_PASSWORD: libraryApp2!
+    depends_on:
+      - db
+    ports:
+    - "8080:8080"
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge

@@ -7,6 +7,7 @@ import com.github.suraj.ailibrary.repository.CategoryRepo;
 import com.github.suraj.ailibrary.repository.ContentPageRepo;
 
 import com.github.suraj.ailibrary.repository.PageOrderEntryRepo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,10 +25,10 @@ public class AiLibraryApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AiLibraryApplication.class, args);
 	}
-
 	@Bean
 	public CommandLineRunner run(ContentPageRepo contentPageRepo, CategoryRepo categoryRepo, PageOrderEntryRepo pageOrderEntryRepo) {
 		return args -> {
+
 			if (contentPageRepo.count() == 0) {
 				// 1. Create and Save Categories
 				Category javaCategory = new Category(null, "Java");
