@@ -7,25 +7,25 @@ import { CustomResponse } from '../interfaces/CustomResponse';
 
 @Injectable({  providedIn: 'root' })
 export class ContentPageService {
-  
+
   private apiUrl = "http://localhost:8080/content-pages";
 
   constructor(private http: HttpClient) {}
 
-  ContentPages$ = <Observable<CustomResponse>> 
+  ContentPages$ = <Observable<CustomResponse>>
   this.http.get(`${this.apiUrl}/`)
   .pipe(
     tap(console.log),
     catchError(this.handleError)
   );
 
-  ContentPage$ = (pageId: number) => <Observable<CustomResponse>> 
+  ContentPage$ = (pageId: number) => <Observable<CustomResponse>>
   this.http.get(`${this.apiUrl}/${pageId}`)
   .pipe(
     tap(console.log),
     catchError(this.handleError)
   );
-  
+
   save$ = (ContentPage: ContentPage) => <Observable<CustomResponse>>
   this.http.post(`${this.apiUrl}/save`, ContentPage)
   .pipe(
@@ -47,7 +47,7 @@ export class ContentPageService {
     tap(console.log),
     catchError(this.handleError)
   );
-  
+
   search$ = (query: string) => <Observable<CustomResponse>>
   this.http.get(`${this.apiUrl}/search?query=${query}`)
   .pipe(
@@ -60,5 +60,5 @@ export class ContentPageService {
     console.log(error);
     return throwError(() => new Error(`An Error Occured - Error code: ${error.status}`));
   }
-  
+
 }

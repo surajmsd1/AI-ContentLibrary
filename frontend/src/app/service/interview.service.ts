@@ -40,7 +40,7 @@ export class InterviewService {
       catchError(this.handleError)
     );
   }
-  
+
   getText$(blob: Blob): Observable<string> {
     const formData = new FormData();
     formData.append('file',blob, 'speech.wav');

@@ -7,6 +7,7 @@ import com.github.suraj.ailibrary.service.services.ContentPageService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class ContentPageServiceImpl implements ContentPageService {
     private final ContentPageRepo contentPageRepo;
     private final PageOrderEntryRepo pageOrderEntryRepo;
+
     @Override
     public ContentPage createContentPage(ContentPage contentPage) {
         log.info("Saving new ContentPage{}",contentPage.getPrompt());
