@@ -53,22 +53,40 @@ public class AiLibraryApplication {
 		};
 	}
 
-
 	@Bean
 	public CorsFilter corsFilter() {
-		UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-		CorsConfiguration corsConfiguration = new CorsConfiguration();
-		corsConfiguration.setAllowCredentials(true);
-		corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://localhost:4200",
-				"https://www.neverforgetnotebook.com"));
-		corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin","Content-Type",
-				"Accept", "Jwt-Token", "Authorization", "Origin, Accept", "X-Requested-With",
-				"Access-Control-Request-Method", "Access-Control-Request-Headers"));
-		corsConfiguration.setExposedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Jwt-Token", "Authorization",
-				"Access-Control-Allow-Origin", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials", "Filename"));
-		corsConfiguration.setAllowedMethods(Arrays.asList("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
-		urlBasedCorsConfigurationSource.registerCorsConfiguration("/**",corsConfiguration);
-		return new CorsFilter(urlBasedCorsConfigurationSource);
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(false); // If you need cookies, etc.
+		config.setAllowedOrigins(Arrays.asList(
+				"http://localhost:3000",
+				"http://localhost:4200",
+				"https://www.neverforgetnotebook.com",
+				"https://neverforgetnotebook.com"
+		));
+		config.setAllowedHeaders(Arrays.asList(
+				"Origin",
+				"Content-Type",
+				"Accept",
+				"Jwt-Token",
+				"Authorization",
+				"X-Requested-With",
+				"Access-Control-Request-Method",
+				"Access-Control-Request-Headers"
+		));
+		config.setExposedHeaders(Arrays.asList(
+				"Content-Type",
+				"Accept",
+				"Jwt-Token",
+				"Authorization",
+				"Filename"
+		));
+		config.setAllowedMethods(Arrays.asList(
+				"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"
+		));
+		source.registerCorsConfiguration("/**", config);
+		return new CorsFilter(source);
 	}
+
 
 }
