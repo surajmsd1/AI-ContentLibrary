@@ -1,0 +1,44 @@
+name: Deploy Frontend to S3
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14' # Specify the Node.js version you need
+
+    - name: Install Angular CLI
+      run: npm install -g @angular/cli
+
+    - name: Install Dependencies
+      run: |
+        cd frontend
+        npm install
+
+    - name: Build Angular Project
+      run: |
+        cd frontend
+        ng build --configuration production
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1 # Set to your AWS region
+
+    - name: Sync Build Directory to S3
+      run: aws s3 sync ./frontend/dist/frontend s3://www.neverforgetnotebook.com --delete
+      # Make sure to replace ./frontend/dist/your-angular-project-name with the correct path to your build output directory
+      # And replace your-s3-bucket-name with your actual S3 bucket name
