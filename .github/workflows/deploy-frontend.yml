@@ -16,7 +16,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14' # Specify the Node.js version you need
+        node-version: '21.6.1' # Specify the Node.js version you need
 
     - name: Install Angular CLI
       run: npm install -g @angular/cli
