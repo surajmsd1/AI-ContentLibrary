@@ -40,5 +40,19 @@ jobs:
 
     - name: Sync Build Directory to S3
       run: aws s3 sync ./frontend/dist/frontend s3://www.neverforgetnotebook.com --delete
-      # Make sure to replace ./frontend/dist/your-angular-project-name with the correct path to your build output directory
-      # And replace your-s3-bucket-name with your actual S3 bucket name
+
+    - name: Invalidate CloudFront Distribution 1
+      run: |
+        aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_1 }} --paths "/*"
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: 'us-east-1'
+
+    - name: Invalidate CloudFront Distribution 2
+      run: |
+        aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_2 }} --paths "/*"
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: 'us-east-1'
