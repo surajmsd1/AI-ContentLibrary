@@ -5,7 +5,7 @@ spring:
     password: ${sql.password}
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
@@ -15,12 +15,10 @@ openai:
   model: gpt-3.5-turbo
   api:
     url: https://api.openai.com/v1/chat/completions
-    key: sk-0AJL2a0bYUdyxdMOf3NOTAKEYWQU15mMyzW1
+    key: sk-0AJL2a0bYUdyxdMOf3-NOTAKEY-WQU15mMyzW1
 server:
   ip_address: 'localhost'
+  address: 0.0.0.0
 sql:
   username: 'libraryapp'
   password: 'libraryApp2!'
-server:
-  address: 0.0.0.0
-

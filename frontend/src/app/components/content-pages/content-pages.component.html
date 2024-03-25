@@ -6,11 +6,11 @@
 </div> -->
 
 
-<div class="container"> 
+<div class="container">
     <div class="border p-5 d-flex gap-1" >
         <!-- home button -->
         <button  class="btn btn-outline-secondary"(click)= "onSearch()"><i class="fa fa-home" aria-hidden="true"></i></button>
-        <input [(ngModel)] = "searchQuery" (keyup.enter) = "onSearch()" class="form-control w-50 auto " placeholder="Search for your notes..." >
+        <input [(ngModel)] = "searchQuery" (keyup.enter) = "onSearch()" class="form-control w-50 auto " placeholder="Search your notes..." >
         <button (click) = "onSearch()" class="btn btn-outline-primary ">Search</button>
         <button (click) = "onOpenAddModal()" class="btn btn-outline-success "><i class="fa fa-plus" aria-hidden="true"></i> Create</button>
         <button disabled class="btn btn-secondary ml-3">Generate Note</button>
@@ -18,27 +18,27 @@
 </div>
 
 <div class="container" *ngIf="appState$ | async as appState">
-    
+
     <!-- Display when data is loading -->
    <div *ngIf="appState.dataState === dataStateEnum.LOADING_STATE">
        <p>Loading content pages...</p>
    </div>
-   
+
     <!-- Display data when successfully loaded -->
    <div *ngIf="appState.dataState === dataStateEnum.LOADED_STATE">
-       
+
         <!-- Display if there's a single content page  -->
        <div class="justify-content-center border" *ngIf="appState.appData?.data?.ContentPage">
-            
+
             <h2>{{appState.appData?.data?.ContentPage?.prompt}}</h2>
             <p>{{appState.appData?.data?.ContentPage?.response}}</p>
-            
+
        </div>
-       
+
         <!-- Display if there's an array of content pages  -->
         <div class= "p-2 card container" *ngFor="let contentPage of appState.appData?.data?.ContentPages; let i = index">
             <div class="card-header row" >
-                <h2 class="col-10">Question {{i+1}}: {{contentPage.prompt}}</h2>
+                <h2 class="col-10">{{i+1}}: {{contentPage.prompt}}</h2>
                 <div class="col-2">
                     <button class= " btn auto btn-outline-primary" (click) = "onOpenEditModal(contentPage)">
                         <i class= "fa fa-pencil"></i> edit
@@ -55,7 +55,7 @@
             </div>
         </div>
    </div>
-   
+
     <!-- Display when there's an error  -->
    <div *ngIf="appState.dataState === dataStateEnum.ERROR_STATE">
        <p>Error loading content pages: {{appState.error}}</p>

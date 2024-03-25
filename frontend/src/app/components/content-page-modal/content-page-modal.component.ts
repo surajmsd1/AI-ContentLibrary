@@ -17,7 +17,7 @@ export class ContentPageModalComponent implements OnInit{
     public modelRef: BsModalRef,
     private formbuilder: FormBuilder,
     private contentPageService: ContentPageService
-    
+
   ){}
 
   ngOnInit(): void {
@@ -56,8 +56,8 @@ export class ContentPageModalComponent implements OnInit{
       console.log(patchContentPage);
       this.contentPageService.patch$(patchContentPage).subscribe(
         response => {
-          alert('Successfully updated database!');
-          
+          // alert('Successfully updated database!');
+
           this.dismiss();
         },
         error => {
@@ -71,7 +71,7 @@ export class ContentPageModalComponent implements OnInit{
       console.log(newContentPage);
       this.contentPageService.save$(newContentPage).subscribe(
         response => {
-          alert('Successfully saved to Database!');
+          // alert('Successfully saved to Database!');
           this.dismiss();
         },
         error => {
@@ -79,7 +79,7 @@ export class ContentPageModalComponent implements OnInit{
         }
       )
     }
-  } 
+  }
   dismiss(): void {
     this.modelRef.hide();
   }
