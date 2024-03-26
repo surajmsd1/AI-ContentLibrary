@@ -4,7 +4,6 @@ import { Observable, catchError, tap, throwError } from 'rxjs';
 import { ContentPage } from '../interfaces/ContentPage';
 import { CustomResponse } from '../interfaces/CustomResponse';
 
-
 @Injectable({  providedIn: 'root' })
 export class ContentPageService {
 
@@ -40,7 +39,6 @@ export class ContentPageService {
     catchError(this.handleError)
   );
 
-
   delete$ = (pageId: number) => <Observable<CustomResponse>>
   this.http.delete(`${this.apiUrl}/delete/${pageId}`)
   .pipe(
@@ -55,10 +53,8 @@ export class ContentPageService {
     catchError(this.handleError)
   );
 
-
   handleError(error: HttpErrorResponse): Observable<never> {
     console.log(error);
     return throwError(() => new Error(`An Error Occured - Error code: ${error.status}`));
   }
-
 }

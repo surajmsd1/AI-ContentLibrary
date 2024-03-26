@@ -18,9 +18,7 @@ openai:
     key: sk-0AJL2a0bYUdyxdMOf3NOTAKEYWQU15mMyzW1
 server:
   ip_address: 'localhost'
+  address: 0.0.0.0
 sql:
   username: 'libraryapp'
   password: 'libraryApp2!'
-server:
-  address: 0.0.0.0
-

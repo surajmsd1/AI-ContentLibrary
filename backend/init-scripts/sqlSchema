@@ -1,0 +1,165 @@
+-- MySQL dump 10.13  Distrib 8.3.0, for Linux (x86_64)
+--
+-- Host: localhost    Database: librarydb
+-- ------------------------------------------------------
+-- Server version	8.3.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `category`
+--
+
+DROP TABLE IF EXISTS `category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `category` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_46ccwnsi9409t36lurvtyljak` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `category`
+--
+
+LOCK TABLES `category` WRITE;
+/*!40000 ALTER TABLE `category` DISABLE KEYS */;
+INSERT INTO `category` VALUES (1,'Java'),(2,'JavaScript');
+/*!40000 ALTER TABLE `category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `content_page`
+--
+
+DROP TABLE IF EXISTS `content_page`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `content_page` (
+  `rating` int DEFAULT NULL,
+  `date` datetime(6) DEFAULT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `model_type` varchar(255) DEFAULT NULL,
+  `prompt` varchar(255) DEFAULT NULL,
+  `response` mediumtext,
+  `reviewed` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FULLTEXT KEY `index_name` (`prompt`,`response`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `content_page`
+--
+
+LOCK TABLES `content_page` WRITE;
+/*!40000 ALTER TABLE `content_page` DISABLE KEYS */;
+INSERT INTO `content_page` VALUES (5,'2024-03-19 20:38:31.039507',1,'GPT-3','Is this even getting updated?','what is happening?','Yes'),(5,'2024-03-19 20:40:53.063000',2,NULL,'Explain JavaScript closures.','this works?','Yes'),(5,NULL,3,NULL,'no way this is working!!!','howejoasd','SURAJ '),(5,NULL,4,NULL,'Hell yeah baby!!!!','its up!','me');
+/*!40000 ALTER TABLE `content_page` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `interview`
+--
+
+DROP TABLE IF EXISTS `interview`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `interview` (
+  `total_score` int NOT NULL,
+  `interview_id` bigint NOT NULL AUTO_INCREMENT,
+  `overall_analysis` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`interview_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `interview`
+--
+
+LOCK TABLES `interview` WRITE;
+/*!40000 ALTER TABLE `interview` DISABLE KEYS */;
+/*!40000 ALTER TABLE `interview` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `interview_question`
+--
+
+DROP TABLE IF EXISTS `interview_question`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `interview_question` (
+  `score` int NOT NULL,
+  `interview_id` bigint DEFAULT NULL,
+  `question_id` bigint NOT NULL AUTO_INCREMENT,
+  `analysis` varchar(255) DEFAULT NULL,
+  `question` varchar(255) NOT NULL,
+  `response` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`question_id`),
+  KEY `FKm66imt5n4b0y877vtv9a8f8og` (`interview_id`),
+  CONSTRAINT `FKm66imt5n4b0y877vtv9a8f8og` FOREIGN KEY (`interview_id`) REFERENCES `interview` (`interview_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `interview_question`
+--
+
+LOCK TABLES `interview_question` WRITE;
+/*!40000 ALTER TABLE `interview_question` DISABLE KEYS */;
+/*!40000 ALTER TABLE `interview_question` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `page_order_entry`
+--
+
+DROP TABLE IF EXISTS `page_order_entry`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `page_order_entry` (
+  `sequence_index` int DEFAULT NULL,
+  `category_id` bigint DEFAULT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `page_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKavcjkcrb0w6wdw4k9inft10ob` (`category_id`),
+  KEY `FK6qfurv4g3by1rngfxgg1l117e` (`page_id`),
+  CONSTRAINT `FK6qfurv4g3by1rngfxgg1l117e` FOREIGN KEY (`page_id`) REFERENCES `content_page` (`id`),
+  CONSTRAINT `FKavcjkcrb0w6wdw4k9inft10ob` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `page_order_entry`
+--
+
+LOCK TABLES `page_order_entry` WRITE;
+/*!40000 ALTER TABLE `page_order_entry` DISABLE KEYS */;
+INSERT INTO `page_order_entry` VALUES (0,1,1,1),(1,2,2,2);
+/*!40000 ALTER TABLE `page_order_entry` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-03-21 20:47:27
