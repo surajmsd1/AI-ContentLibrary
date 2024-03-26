@@ -57,7 +57,7 @@ public class AiLibraryApplication {
 	public CorsFilter corsFilter() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
-		config.setAllowCredentials(false); // If you need cookies, etc.
+		config.setAllowCredentials(false);
 		config.setAllowedOrigins(Arrays.asList(
 				"http://localhost:3000",
 				"http://localhost:4200",

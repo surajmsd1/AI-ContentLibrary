@@ -19,8 +19,8 @@ export class AppComponent {
   // dataStateEnum = DataState;
   // appState$: Observable<AppState<CustomResponse>> = of({ dataState: DataState.LOADING_STATE });
   // searchQuery!: string; // Bound to the input field
-  // bsModalRef!: BsModalRef;  
-  
+  // bsModalRef!: BsModalRef;
+
   constructor(
     // private contentPageService: ContentPageService,
     // private modalService: BsModalService,

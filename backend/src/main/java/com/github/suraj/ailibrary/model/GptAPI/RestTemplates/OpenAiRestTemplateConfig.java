@@ -18,14 +18,12 @@ public class OpenAiRestTemplateConfig {
     @Bean
     @Qualifier("openaiRestTemplate")
     public RestTemplate openAiTemplate(){
-        System.out.println("THIS IS THE API KEY FROM REST-TEMP-CONFIG: "+openaiApiKey);
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getInterceptors().add((request, body, execution) -> {
             request.getHeaders().add("Authorization", "Bearer " + openaiApiKey);
 //            request.getHeaders().add("OpenAI-Organization", openaiApiOrgKey);
             return execution.execute(request, body);
         });
-
         return restTemplate;
     }
 }

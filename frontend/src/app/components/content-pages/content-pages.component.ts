@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ContentPageService } from 'src/app/service/content-page.service';
-import { AppState } from 'src/app/interfaces/app-state'; 
+import { AppState } from 'src/app/interfaces/app-state';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { CustomResponse } from 'src/app/interfaces/CustomResponse'; 
-import { DataState } from 'src/app/enums/data-state'; 
+import { CustomResponse } from 'src/app/interfaces/CustomResponse';
+import { DataState } from 'src/app/enums/data-state';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { ContentPageModalComponent } from '../content-page-modal/content-page-modal.component'; 
-import { ContentPage } from 'src/app/interfaces/ContentPage'; 
+import { ContentPageModalComponent } from '../content-page-modal/content-page-modal.component';
+import { ContentPage } from 'src/app/interfaces/ContentPage';
 
 @Component({
   selector: 'app-content-pages',
@@ -19,8 +19,8 @@ export class ContentPagesComponent {
   dataStateEnum = DataState;
   appState$: Observable<AppState<CustomResponse>> = of({ dataState: DataState.LOADING_STATE });
   searchQuery!: string; // Bound to the input field
-  bsModalRef!: BsModalRef;  
-  
+  bsModalRef!: BsModalRef;
+
   constructor(
     private contentPageService: ContentPageService,
     private modalService: BsModalService,
@@ -44,7 +44,8 @@ export class ContentPagesComponent {
     });
 
     this.bsModalRef.onHide?.subscribe(() => {
-      this.onDetails(contentPage.id);
+      // this.onDetails(contentPageid);
+      this.getAllPages();
     })
   }
 

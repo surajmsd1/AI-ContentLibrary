@@ -1,0 +1,58 @@
+name: Deploy Frontend to S3
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '21.6.1' # Specify the Node.js version you need
+
+    - name: Install Angular CLI
+      run: npm install -g @angular/cli
+
+    - name: Install Dependencies
+      run: |
+        cd frontend
+        npm install
+
+    - name: Build Angular Project
+      run: |
+        cd frontend
+        ng build --configuration production
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1 # Set to your AWS region
+
+    - name: Sync Build Directory to S3
+      run: aws s3 sync ./frontend/dist/frontend s3://www.neverforgetnotebook.com --delete --exclude "assets/*"
+
+    - name: Invalidate CloudFront Distribution 1
+      run: |
+        aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_1 }} --paths "/*"
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: 'us-east-1'
+
+    - name: Invalidate CloudFront Distribution 2
+      run: |
+        aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_2 }} --paths "/*"
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: 'us-east-1'
