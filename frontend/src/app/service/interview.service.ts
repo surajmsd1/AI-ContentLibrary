@@ -9,7 +9,7 @@ import { AnalysisRequest } from '../interfaces/analysis-request';
 })
 export class InterviewService {
 
-  private interviewApiUrl = "http://localhost:8080/interview";
+  private interviewApiUrl = "https://sk.thundernutstudios.com/interview";
 
   constructor(private http: HttpClient) { }
 
