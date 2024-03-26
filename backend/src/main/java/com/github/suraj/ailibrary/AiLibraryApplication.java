@@ -62,7 +62,7 @@ public class AiLibraryApplication {
 				"http://localhost:3000",
 				"http://localhost:4200",
 				"https://www.neverforgetnotebook.com",
-				"https://neverforgetnotebook.com",
+				"https://neverforgetnotebook.com"
 		));
 		config.setAllowedHeaders(Arrays.asList(
 				"Origin",
@@ -72,7 +72,7 @@ public class AiLibraryApplication {
 				"Authorization",
 				"X-Requested-With",
 				"Access-Control-Request-Method",
-				"Access-Control-Request-Headers",
+				"Access-Control-Request-Headers"
 		));
 		config.setExposedHeaders(Arrays.asList(
 				"Content-Type",
