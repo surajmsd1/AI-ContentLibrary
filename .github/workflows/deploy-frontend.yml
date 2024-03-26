@@ -39,7 +39,7 @@ jobs:
         aws-region: us-east-1 # Set to your AWS region
 
     - name: Sync Build Directory to S3
-      run: aws s3 sync ./frontend/dist/frontend s3://www.neverforgetnotebook.com --delete
+      run: aws s3 sync ./frontend/dist/frontend s3://www.neverforgetnotebook.com --delete --exclude "assets/*"
 
     - name: Invalidate CloudFront Distribution 1
       run: |
