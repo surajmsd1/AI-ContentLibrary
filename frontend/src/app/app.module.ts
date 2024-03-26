@@ -14,7 +14,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 const appRoutes: Routes= [
   { path: '', component: HomepageComponent},
-  { path: 'interview-me', component: InterviewComponent},
+  { path: 'interview', component: InterviewComponent},
   { path: 'content-pages', component: ContentPagesComponent},
 ]
 @NgModule({
