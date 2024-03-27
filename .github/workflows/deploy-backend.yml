@@ -1,1 +1,20 @@
+name: Deploy Backend on Changes
 
+on:
+  push:
+    paths:
+      - 'backend/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup SSH and Execute Deployment Script on Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: 136.56.122.133
+          port: 6969
+          username: suraj
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            ./deploy_backend.sh
