@@ -53,6 +53,7 @@ public class CategoryResource {
                         .build()
         );
     }
+
     @Transactional
     @PostMapping("/{categoryName}/{contentPageId}")
     public ResponseEntity<Response> addPageToCategory(@PathVariable("categoryName") String categoryName,
@@ -83,7 +84,6 @@ public class CategoryResource {
                             .build()
             );
         }
-
     }
 
 //    @GetMapping("/")
@@ -109,6 +109,4 @@ public class CategoryResource {
 //            return ResponseEntity.notFound().build();
 //        }
 //    }
-
-
 }
